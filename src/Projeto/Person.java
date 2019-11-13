@@ -21,6 +21,30 @@ public class Person {
         this.email = eMail;
     }
 
+    private void addProject( Project project){
+
+
+    }
+
+    private void deleteProject( Project project ){
+
+
+    }
+
+    private void addTask( Task task){
+
+
+    }
+
+    private void deleteTask( Task task){
+
+
+    }
+
+    private boolean ckeckOverload(){
+        return false;
+    }
+
     public String getName() {
         return name;
     }
