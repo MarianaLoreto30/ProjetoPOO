@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Person {
 
-    private String name;
-    private String email;
+    protected String name;
+    protected String email;
     private ArrayList<Project> projects;
     private ArrayList<Task> tasks;
 
