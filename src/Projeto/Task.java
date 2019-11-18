@@ -2,7 +2,7 @@ package Projeto;
 
 import java.util.Date;
 
-public class Task {
+public abstract class Task {
 
     private Date startDate;
     private Date endDate;
@@ -25,9 +25,7 @@ public class Task {
     }
 
 
-    private boolean checkOverload(){
-        return true;
-    }
+    abstract boolean checkOverload();
 
     // Getters and Setters
     public Date getStartDate() {

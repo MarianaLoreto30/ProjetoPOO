@@ -21,27 +21,27 @@ public class Person {
         this.email = eMail;
     }
 
-    private void addProject( Project project){
+    public void addProject( Project project){
 
 
     }
 
-    private void deleteProject( Project project ){
+    public void deleteProject( Project project ){
 
 
     }
 
-    private void addTask( Task task){
+    public void addTask( Task task){
 
 
     }
 
-    private void deleteTask( Task task){
+    public void deleteTask( Task task){
 
 
     }
 
-    private boolean ckeckOverload(){
+    public boolean ckeckOverload(){
         return false;
     }
 

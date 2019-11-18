@@ -26,24 +26,24 @@ public class Project {
         this.duration = duration;
     }
 
-    private Task creatTask(){
+    public Task creatTask(){
         Task task = new Task();
         return task;
     }
 
-    private void listTask(){
+    public void listTask(){
 
     }
 
-    private void deleteTask(){
+    public void deleteTask(){
 
     }
 
-    private void taskConclusionState(){
+    public void taskConclusionState(){
 
     }
 
-    private void listNonInitialized(){
+    public void listNonInitialized(){
 
     }
 
@@ -55,11 +55,11 @@ public class Project {
 
     }
 
-    private double projectCost (){
+    public double projectCost (){
         return 0.0;
     }
 
-    private void finishProject(){
+    public void finishProject(){
 
     }
 

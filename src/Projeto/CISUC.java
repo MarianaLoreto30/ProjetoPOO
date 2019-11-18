@@ -18,7 +18,7 @@ public class CISUC {
 
     }
 
-    private ArrayList<Person> readFilePeople(){
+    public ArrayList<Person> readFilePeople(){
         ArrayList<Person> personList = new ArrayList<>();
 
         File f = new File("People.txt");
@@ -49,30 +49,28 @@ public class CISUC {
         return personList;
     }
 
-    private ArrayList<Project> readFileProjects(){
+    public ArrayList<Project> readFileProjects(){
         ArrayList<Project> projectList = new ArrayList<>();
         return projectList;
     }
 
-    private Project createProject(){
+    public Project createProject(){
         Project proj = new Project();
         return proj;
     }
 
-    private Person createPerson(){
+    public Person createPerson(){
         Person person = new Person();
         return person;
     }
 
-    private void personAssociation(Person person, Project proj){
+    public void personAssociation(Person person, Project proj){
 
     }
 
-    private boolean projectState(Project proj){
+    public boolean projectState(Project proj){
         return true;
     }
-
-
 
 
 }
