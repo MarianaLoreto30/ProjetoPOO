@@ -2,7 +2,7 @@ package Projeto;
 
 import java.util.ArrayList;
 
-public class Person {
+public abstract class Person {
 
     protected String name;
     protected String email;
@@ -20,6 +20,8 @@ public class Person {
         this.name = name;
         this.email = eMail;
     }
+
+    abstract int calcCost();
 
     public void addProject( Project project){
 
