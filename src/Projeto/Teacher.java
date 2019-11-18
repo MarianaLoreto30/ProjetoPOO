@@ -15,6 +15,10 @@ public class Teacher extends Person{
         this.reserchArea = reserchArea;
     }
 
+    public int calcCost(){
+        return 0;
+    }
+
     public int getMechaNumber() {
         return mechaNumber;
     }

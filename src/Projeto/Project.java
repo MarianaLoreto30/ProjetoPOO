@@ -9,14 +9,12 @@ public class Project {
     private Date startDate;
     private int duration;
     private ArrayList<Task> tasks;
-    private ArrayList<Teacher> teachers;
-    private ArrayList<Scholar> scholars;
+    private ArrayList<Person> people;
 
     public Project(){
         name="Unknown";
         tasks= new ArrayList<>();
-        teachers= new ArrayList<>();
-        scholars= new ArrayList<>();
+        people = new  ArrayList<>();
     }
 
     public Project(String name, String acronym, Date startDate, int duration) {
@@ -25,11 +23,11 @@ public class Project {
         this.startDate = startDate;
         this.duration = duration;
     }
-
+    /*
     public Task creatTask(){
         Task task = new Task();
         return task;
-    }
+    }*/
 
     public void listTask(){
 

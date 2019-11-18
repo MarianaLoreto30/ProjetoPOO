@@ -14,13 +14,14 @@ public class CISUC {
     private ArrayList<Project> projects;
 
     public CISUC(){
-
         readFilePeople();
 
     }
 
     public ArrayList<Person> readFilePeople(){
         ArrayList<Person> personList = new ArrayList<>();
+
+        String[] aux;
 
         File f = new File("People.txt");
         if(f.exists() && f.isFile()) {
@@ -31,6 +32,10 @@ public class CISUC {
                 String line;
                 while((line = br.readLine()) != null) {
                     System.out.println(line);
+                    aux = line.split(";");
+                    for (int i = 0; i < aux.length; i++) {
+                        System.out.println(aux[i]);
+                    }
                 }
 
                 br.close();
@@ -60,10 +65,11 @@ public class CISUC {
         return proj;
     }
 
+    /*
     public Person createPerson(){
-        Person person = new Person();
+        Person person = new Teacher(name, );
         return person;
-    }
+    }*/
 
     public void personAssociation(Person person, Project proj){
 
