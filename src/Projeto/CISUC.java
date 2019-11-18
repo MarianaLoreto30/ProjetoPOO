@@ -2,6 +2,7 @@ package Projeto;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CISUC {
 
@@ -72,5 +73,12 @@ public class CISUC {
         return true;
     }
 
+    public void register(){
+        Person newPerson = createPerson();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Insert your name:");
+        newPerson.name = sc.nextLine();
 
+
+    }
 }
