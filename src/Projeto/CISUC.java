@@ -33,8 +33,8 @@ public class CISUC {
                 while((line = br.readLine()) != null) {
                     System.out.println(line);
                     aux = line.split(";");
-                    for (int i = 0; i < aux.length; i++) {
-                        System.out.println(aux[i]);
+                    if(aux[0].equalsIgnoreCase("Teacher")){
+                        createTeacher(aux[2], aux[3], Integer.parseInt(aux[7]), aux[8]);
                     }
                 }
 
@@ -65,11 +65,14 @@ public class CISUC {
         return proj;
     }
 
-    /*
-    public Person createPerson(){
-        Person person = new Teacher(name, );
+
+    public Person createTeacher(String name, String email, int mechaNumber, String reserchArea){
+        //String name, String eMail, int mechaNumber, String reserchArea
+        Person person;
+        person = new Teacher(name, email, mechaNumber, reserchArea);
+
         return person;
-    }*/
+    }
 
     public void personAssociation(Person person, Project proj){
 
@@ -79,6 +82,7 @@ public class CISUC {
         return true;
     }
 
+    /*
     public void register(){
         Person newPerson = createPerson();
         Scanner sc = new Scanner(System.in);
@@ -86,5 +90,5 @@ public class CISUC {
         newPerson.name = sc.nextLine();
 
 
-    }
+    }*/
 }
