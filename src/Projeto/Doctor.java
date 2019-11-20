@@ -7,8 +7,8 @@ public class Doctor extends  Scholar{
         super(startDate, finalDate);
     }
 
-    public Doctor(String name, String eMail, Date startDate, Date finalDate, String cost) {
-        super(name, eMail, startDate, finalDate, cost);
+    public Doctor(String name, String eMail, Date startDate, Date finalDate) {
+        super(name, eMail, startDate, finalDate);
     }
 
     public int calcCost(){

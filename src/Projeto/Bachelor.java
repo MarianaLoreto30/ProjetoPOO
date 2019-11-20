@@ -8,9 +8,10 @@ public class Bachelor extends Scholar {
         super(startDate, finalDate);
     }
 
-    public Bachelor(String name, String eMail, Date startDate, Date finalDate, String cost) {
-        super(name, eMail, startDate, finalDate, cost);
+    public Bachelor(String name, String eMail, Date startDate, Date finalDate) {
+        super(name, eMail, startDate, finalDate);
     }
+
 
     public int calcCost(){
         return 500;

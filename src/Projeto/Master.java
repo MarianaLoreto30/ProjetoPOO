@@ -8,8 +8,8 @@ public class Master extends  Scholar {
         super(startDate, finalDate);
     }
 
-    public Master(String name, String eMail, Date startDate, Date finalDate, String cost) {
-        super(name, eMail, startDate, finalDate, cost);
+    public Master(String name, String eMail, Date startDate, Date finalDate) {
+        super(name, eMail, startDate, finalDate);
     }
 
     public int calcCost(){

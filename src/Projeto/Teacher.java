@@ -1,8 +1,17 @@
 package Projeto;
 
+import java.util.ArrayList;
+
 public class Teacher extends Person{
     private int mechaNumber;
     private String reserchArea;
+    //private ArrayList<Scholar> scholars;
+
+    public Teacher(){
+        mechaNumber=0;
+        reserchArea="Reserch area: unknown";
+        //scholars = new ArrayList<>();
+    }
 
     public Teacher(int mechaNumber, String reserchArea) {
         this.mechaNumber = mechaNumber;
@@ -14,6 +23,10 @@ public class Teacher extends Person{
         this.mechaNumber = mechaNumber;
         this.reserchArea = reserchArea;
     }
+    /*
+    public void addScholars(Scholar scholar){
+        scholars.add(scholar);
+    }*/
 
     public int calcCost(){
         return 0;

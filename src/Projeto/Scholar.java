@@ -12,7 +12,7 @@ public abstract class Scholar extends Person {
         this.finalDate = finalDate;
     }
 
-    public Scholar(String name, String eMail, Date startDate, Date finalDate, String cost) {
+    public Scholar(String name, String eMail, Date startDate, Date finalDate) {
         super(name, eMail);
         this.startDate = startDate;
         this.finalDate = finalDate;
