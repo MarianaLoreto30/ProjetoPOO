@@ -22,11 +22,9 @@ public class CISUC {
     }
 
     /**
-     * read the people's file and create the object Person (this method does not associate people and projects)
-     * @return ArrayList of people? QUERO ALTERAR ISTO!! Faz mais sentido adicionar a pessoa direamente à lista
+     * read the people's file and create the object Person adding in the arrayList (this method does not associate people and projects)
      */
-    public ArrayList<Person> readFilePeople(){
-        ArrayList<Person> personList = new ArrayList<>();
+    public void readFilePeople(){
         Person person;
         String[] aux;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -43,33 +41,44 @@ public class CISUC {
                 while((line = br.readLine()) != null) {
                     System.out.println(line);
                     aux = line.split(";");
-                    if(aux[0].equalsIgnoreCase("Teacher")){
-                        try {
-                            mechaNumber=Integer.parseInt(aux[7]);
-                        } catch (NumberFormatException e){
-                            System.out.println("Erro ao converter mechaNumber:\n" + e.getMessage());
-                        }
-                        //String name, String eMail, int mechaNumber, String reserchArea
-                        person = new Teacher(aux[2], aux[3], mechaNumber, aux[8]);
-                    }
-                    else if(aux[0].equalsIgnoreCase("Scholar")){
-                        try {
-                            aux1=format.parse(aux[7]);
-                            aux2=format.parse(aux[8]);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            System.out.println("Erro na data do bolseiro.");
-                        }
 
-                        if(aux[1].equalsIgnoreCase("Bachelor")){
-                            person = new Bachelor(aux[2], aux[3], aux1, aux2);
+
+                    try {
+                        if (aux[0].equalsIgnoreCase("Teacher")) {
+                            try {
+                                mechaNumber = Integer.parseInt(aux[7]);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Erro ao converter mechaNumber:\n" + e.getMessage());
+                            }
+
+                            person = new Teacher(aux[2], aux[3], mechaNumber, aux[8]);
+
+                            //Tenho de criar tarefa para adicionar! Provavelmente é necessário um ficheiro só para tarefas!!
+
+                            people.add(person);
+                        } else if (aux[0].equalsIgnoreCase("Scholar")) {
+
+                            try {
+                                aux1 = format.parse(aux[7]);
+                                aux2 = format.parse(aux[8]);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                System.out.println("Erro na data do bolseiro.");
+                            }
+
+                            if (aux[1].equalsIgnoreCase("Bachelor")) {
+                                person = new Bachelor(aux[2], aux[3], aux1, aux2);
+                                people.add(person);
+                            } else if (aux[1].equalsIgnoreCase("Master")) {
+                                person = new Master(aux[2], aux[3], aux1, aux2);
+                                people.add(person);
+                            } else if (aux[1].equalsIgnoreCase("Doctor")) {
+                                person = new Doctor(aux[2], aux[3], aux1, aux2);
+                                people.add(person);
+                            }
                         }
-                        else if(aux[1].equalsIgnoreCase("Master")){
-                            person = new Master(aux[2], aux[3], aux1, aux2);
-                        }
-                        else if(aux[1].equalsIgnoreCase("Doctor")){
-                            person = new Doctor(aux[2], aux[3], aux1, aux2);
-                        }
+                    }catch (IndexOutOfBoundsException e){
+                        System.out.println("Erro de indexação: " + e.getMessage());
                     }
                 }
                 br.close();
@@ -82,8 +91,6 @@ public class CISUC {
         else {
             System.out.println("Ficheiro não existe.");
         }
-
-        return personList;
     }
 
     public ArrayList<Project> readFileProjects(){
@@ -96,7 +103,7 @@ public class CISUC {
         return proj;
     }
 
-
+    /*
     public Person createTeacher(String name, String email, int mechaNumber, String reserchArea){
         //String name, String eMail, int mechaNumber, String reserchArea
         Person person;
@@ -111,7 +118,7 @@ public class CISUC {
         person = new Bachelor(name, email, startDate, finalDate);
 
         return person;
-    }
+    }*/
 
     public void personAssociation(Person person, Project proj){
 

@@ -1,0 +1,8 @@
+1.Responsavel;
+
+private Date startDate;
+private Date endDate;
+private int duration;
+private int conclusionState;
+private Person responsible;
+private float effortRate;
