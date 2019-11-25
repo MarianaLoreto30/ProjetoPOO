@@ -103,11 +103,20 @@ public class CISUC {
         projects.add(new Project(name, acronym, startDate, duration));
     }
 
-    public void listProjects(){
+    public void listAllProjects(){
         for(int i = 0; i < projects.size(); i++){
             System.out.println(i + "." + projects.get(i).getName());
         }
     }
+
+    public void listProjectFeatures(Project project, int index){
+        project.listProjectFeatures(index);
+    }
+
+    public void listPeopleinProject(Project project){
+        project.listPeopleinProject();
+    }
+
 
     public void removeProject(int index){
         projects.remove(index);
@@ -124,8 +133,8 @@ public class CISUC {
         }
     }
 
-    public void listTask(Project project){
-        project.listTask();
+    public void listTasks(Project project){
+        project.listTasks();
     }
 
     public void deleteTask(Project project, int index){
@@ -148,7 +157,6 @@ public class CISUC {
         project.listCompleteTasks();
     }
 
-    /*
     public Person createTeacher(String name, String email, int mechaNumber, String reserchArea){
         //String name, String eMail, int mechaNumber, String reserchArea
         Person person;
@@ -163,7 +171,26 @@ public class CISUC {
         person = new Bachelor(name, email, startDate, finalDate);
 
         return person;
-    }*/
+    }
+    public void listAllPeople(){}
+    public void listPersonTasks(){}
+    public void listPersonProjects(){}
+
+    public void deleteProjectFromPerson(Person person, int index){
+        person.deleteProjectFromPerson(index);
+    }
+
+    public void addTask(Person person, Task task){
+        person.addTaskToPerson(task);
+    }
+
+    public void addTaskToPerson(Person person, Task task){
+        person.addTaskToPerson(task);
+    }
+
+    public void deleteTaskFromPerson(Person person, int index){
+        person.deleteTaskFromPerson(index);
+    }
 
     public void personAssociation(Person person, Project proj){
 
@@ -173,15 +200,9 @@ public class CISUC {
         return true;
     }
 
-    /*
-    public void register(){
-        Person newPerson = createPerson();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Insert your name:");
-        newPerson.name = sc.nextLine();
-
-
-    }*/
+    public void addProjectToPerson(Person person, Project project){
+        person.addProjectToPerson(project);
+    }
 
 
 }

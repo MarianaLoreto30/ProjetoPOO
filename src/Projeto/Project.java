@@ -25,14 +25,23 @@ public class Project {
         this.duration = duration;
     }
 
+    public void listProjectFeatures(int index){
+        System.out.println("-Name: " + getName() + '\n' + "-Acronym: " + getAcronym() + '\n' + "-Start date: " + getStartDate() + '\n' + "-Duration: " + getDuration());
+    }
+
+    public void listPeopleinProject(){
+        for(int i = 0; i < people.size(); i++){
+            System.out.println(i + '.' + people.get(i).name);
+        }
+    }
 
     public void addTask(Task task) {
         tasks.add(task);
     }
 
-    public void listTask() {
+    public void listTasks() {
         for(int i = 0; i < tasks.size(); i++){
-            System.out.println(i + "." + tasks.get(i).getName());
+            System.out.println(i + '.' + tasks.get(i).getName());
         }
     }
 
@@ -50,7 +59,7 @@ public class Project {
         int j = 1;
         for(int i = 0; i < tasks.size(); i++){
             if(taskConclusionState(i) == 0){
-                System.out.println(j + "." + tasks.get(i).getName());
+                System.out.println(j + '.' + tasks.get(i).getName());
                 j++;
             }
         }
@@ -62,7 +71,7 @@ public class Project {
         Date currentDate = new Date();
         for(int i = 0; i < tasks.size(); i++){
             if(currentDate.after(tasks.get(i).getEndDate())){
-                System.out.println(j + "." + tasks.get(i).getName());
+                System.out.println(j + '.' + tasks.get(i).getName());
                 j++;
             }
         }
@@ -73,7 +82,7 @@ public class Project {
         int j = 1;
         for(int i = 0; i < tasks.size(); i++){
             if(taskConclusionState(i) == 100){
-                System.out.println(j + "." + tasks.get(i).getName());
+                System.out.println(j + '.' + tasks.get(i).getName());
                 j++;
             }
         }
@@ -83,7 +92,7 @@ public class Project {
         return 0.0;
     }*/
 
-    public void finishProject(){ //ainda nao percebi bem o que é para fazer aqui
+    public void finishProject(){ // ainda nao sei o que fazer aqui
 
     }
 

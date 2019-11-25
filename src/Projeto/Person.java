@@ -12,8 +12,8 @@ public abstract class Person {
     public Person(){
         name = "Unknown";
         email = "unknown@email.com";
-        projects= new ArrayList<>();
-        tasks= new ArrayList<>();
+        projects = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
     public Person(String name, String eMail) {
@@ -23,28 +23,32 @@ public abstract class Person {
 
     abstract int calcCost();
 
-    public void addProject( Project project){
-
-
+    public void addProjectToPerson(Project project){
+        projects.add(project);
     }
 
-    public void deleteProject( Project project ){
-
-
+    public void deleteProjectFromPerson(int index){
+        projects.remove(index);
     }
 
-    public void addTask(Task task){
-
-
+    public void addTaskToPerson(Task task){
+        tasks.add(task);
     }
 
-    public void deleteTask( Task task){
-
-
+    public void deleteTaskFromPerson(int index){
+        tasks.remove(index);
     }
 
-    public boolean ckeckOverload(){
-        return false;
+    public boolean ckeckOverload() {
+        int load = 0;
+        for (int i = 0; i < tasks.size(); i++) {
+            load += tasks.get(i).getEffortRate();
+        }
+        if (load <= 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String getName() {
