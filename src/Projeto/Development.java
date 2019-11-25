@@ -7,8 +7,8 @@ public class Development extends  Task {
 
     }
 
-    public Development(Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
-        super(startDate, endDate, duration, conclusionState, responsible, effortRate);
+    public Development(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+        super(name, startDate, endDate, duration, conclusionState, responsible, effortRate);
     }
 
     public boolean checkOverload(){

@@ -7,8 +7,8 @@ public class Design extends Task {
     public Design() {
     }
 
-    public Design(Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
-        super(startDate, endDate, duration, conclusionState, responsible, effortRate);
+    public Design(String name,Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+        super(name, startDate, endDate, duration, conclusionState, responsible, effortRate);
     }
 
     public boolean checkOverload(){

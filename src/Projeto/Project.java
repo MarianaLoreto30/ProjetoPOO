@@ -12,9 +12,10 @@ public class Project {
     private ArrayList<Person> people;
 
     public Project(){
-        name="Unknown";
-        tasks= new ArrayList<>();
+        name ="Unknown";
+        tasks = new ArrayList<>();
         people = new  ArrayList<>();
+
     }
 
     public Project(String name, String acronym, Date startDate, int duration) {
@@ -23,41 +24,66 @@ public class Project {
         this.startDate = startDate;
         this.duration = duration;
     }
-    /*
-    public Task creatTask(){
-        Task task = new Task();
-        return task;
-    }*/
 
-    public void listTask(){
 
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
-    public void deleteTask(){
-
+    public void listTask() {
+        for(int i = 0; i < tasks.size(); i++){
+            System.out.println(i + "." + tasks.get(i).getName());
+        }
     }
 
-    public void taskConclusionState(){
+    public void deleteTask(int index){
+        tasks.remove(index);
+    }
 
+    public int taskConclusionState(int index){
+        System.out.println("This task is " + tasks.get(index).getConclusionState() + "% complete");
+        return tasks.get(index).getConclusionState();
     }
 
     public void listNonInitialized(){
-
+        System.out.println("Non initialized tasks:");
+        int j = 1;
+        for(int i = 0; i < tasks.size(); i++){
+            if(taskConclusionState(i) == 0){
+                System.out.println(j + "." + tasks.get(i).getName());
+                j++;
+            }
+        }
     }
 
-    private void listOutOfDateTasks(){
-
+    public void listOutOfDateTasks(){
+        System.out.println("Out of date tasks:");
+        int j = 1;
+        Date currentDate = new Date();
+        for(int i = 0; i < tasks.size(); i++){
+            if(currentDate.after(tasks.get(i).getEndDate())){
+                System.out.println(j + "." + tasks.get(i).getName());
+                j++;
+            }
+        }
     }
 
-    private void listCompleteTasks(){
-
+    public void listCompleteTasks(){
+        System.out.println("Completed tasks:");      //como fazemos para delimitar os valores de conclusao?
+        int j = 1;
+        for(int i = 0; i < tasks.size(); i++){
+            if(taskConclusionState(i) == 100){
+                System.out.println(j + "." + tasks.get(i).getName());
+                j++;
+            }
+        }
     }
 
-    public double projectCost (){
+    /*public double projectCost (){ !!nao aqui, na classe person!!
         return 0.0;
-    }
+    }*/
 
-    public void finishProject(){
+    public void finishProject(){ //ainda nao percebi bem o que é para fazer aqui
 
     }
 
@@ -93,4 +119,5 @@ public class Project {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
 }

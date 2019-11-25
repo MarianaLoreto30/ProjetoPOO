@@ -4,6 +4,7 @@ import java.util.Date;
 
 public abstract class Task {
 
+    private String name;
     private Date startDate;
     private Date endDate;
     private int duration;
@@ -15,7 +16,8 @@ public abstract class Task {
 
     }
 
-    public Task(Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+    public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+        this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.duration = duration;
@@ -28,6 +30,15 @@ public abstract class Task {
     abstract boolean checkOverload();
 
     // Getters and Setters
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

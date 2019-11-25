@@ -13,6 +13,7 @@ public class CISUC {
 
         new CISUC();
     }
+
     private ArrayList<Person> people;
     private ArrayList<Project> projects;
 
@@ -93,14 +94,58 @@ public class CISUC {
         }
     }
 
-    public ArrayList<Project> readFileProjects(){
-        ArrayList<Project> projectList = new ArrayList<>();
+/*    public ArrayList<Project> readFileProjects(){
+        ArrayList<Project> projectList = new ArrayList<>();  //o cabral diz que isto é redundante porque ja temos uma em cima
         return projectList;
+    }*/
+
+    public void addProject(String name, String acronym, Date startDate, int duration){
+        projects.add(new Project(name, acronym, startDate, duration));
     }
 
-    public Project createProject(){
-        Project proj = new Project();
-        return proj;
+    public void listProjects(){
+        for(int i = 0; i < projects.size(); i++){
+            System.out.println(i + "." + projects.get(i).getName());
+        }
+    }
+
+    public void removeProject(int index){
+        projects.remove(index);
+    }
+
+    public void addTask(Project project, String type, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate){
+        switch(type){
+            case "Design":
+                project.addTask(new Design(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+            case "Documentation":
+                project.addTask(new Documentation(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+            case "Development":
+                project.addTask(new Development(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+        }
+    }
+
+    public void listTask(Project project){
+        project.listTask();
+    }
+
+    public void deleteTask(Project project, int index){
+        project.deleteTask(index);
+    }
+
+    public void taskConclusionState(Project project, int index){
+        project.taskConclusionState(index);
+    }
+
+    public void listNonInitialized(Project project){
+        project.listNonInitialized();
+    }
+
+    private void listOutOfDateTasks(Project project){
+        project.listOutOfDateTasks();
+    }
+
+    public void listCompleteTasks(Project project) {
+        project.listCompleteTasks();
     }
 
     /*
