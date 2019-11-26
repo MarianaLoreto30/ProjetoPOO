@@ -13,7 +13,6 @@ public class CISUC {
 
         new CISUC();
     }
-
     private ArrayList<Person> people;
     private ArrayList<Project> projects;
 
@@ -28,9 +27,11 @@ public class CISUC {
     public void readFilePeople(){
         Person person;
         String[] aux;
+        String line;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date aux1 = new Date(), aux2 = new Date();
         int mechaNumber= 0;
+        people = new ArrayList<>();
 
         File f = new File("People.txt");
         if(f.exists() && f.isFile()) {
@@ -38,26 +39,30 @@ public class CISUC {
                 FileReader fr = new FileReader(f);
                 BufferedReader br = new BufferedReader(fr);
 
-                String line;
                 while((line = br.readLine()) != null) {
-                    System.out.println(line);
                     aux = line.split(";");
 
-
                     try {
+                        //FALTA ASSOCIAR Bolseiros
                         if (aux[0].equalsIgnoreCase("Teacher")) {
                             try {
                                 mechaNumber = Integer.parseInt(aux[7]);
                             } catch (NumberFormatException e) {
-                                System.out.println("Erro ao converter mechaNumber:\n" + e.getMessage());
+                                System.out.println("Erro ao converter mechaNumber: " + e.getMessage());
                             }
 
                             person = new Teacher(aux[2], aux[3], mechaNumber, aux[8]);
 
                             //Tenho de criar tarefa para adicionar! Provavelmente é necessário um ficheiro só para tarefas!!
 
-                            people.add(person);
-                        } else if (aux[0].equalsIgnoreCase("Scholar")) {
+                            try{
+                                people.add(person);
+                            }catch (NullPointerException e){
+                                System.out.println("Erro ao adicionar na lista: " + e.getMessage());
+                            }
+                        }
+                        //FALTA ASSOCIAR ORIENTADORES
+                        else if (aux[0].equalsIgnoreCase("Scholar")) {
 
                             try {
                                 aux1 = format.parse(aux[7]);
@@ -94,10 +99,76 @@ public class CISUC {
         }
     }
 
-/*    public ArrayList<Project> readFileProjects(){
-        ArrayList<Project> projectList = new ArrayList<>();  //o cabral diz que isto é redundante porque ja temos uma em cima
-        return projectList;
-    }*/
+
+   public void readFileProjects(){
+        projects= new ArrayList<>();
+        Project project;
+        String line;
+        String[] aux;
+        boolean safe;
+       SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+       Date date1 = new Date();
+       int duration = 0;
+
+       File fProj = new File("Projects.txt");
+       File fTask = new File("Tasks.txt");
+
+       if(fProj.exists() && fProj.isFile()) {
+           try{
+               FileReader fr = new FileReader(fProj);
+               BufferedReader br = new BufferedReader(fr);
+
+               while((line = br.readLine()) != null) {
+                   System.out.println(line);
+                   aux = line.split(";");
+                   safe=true;
+
+                   for (Project p: projects){
+                       if( aux[0].equalsIgnoreCase(p.getName()) ){
+                           System.out.println("Erro: nome do projeto já existe");
+                           safe=false; //ignoro este projeto
+                           break;
+                       }
+                   }
+
+                   if(safe==true){
+                       try {
+                           date1 = format.parse(aux[2]);
+                           duration = Integer.parseInt(aux[3]);
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                           System.out.println("Error in date: " + e.getMessage());
+                       } catch (NumberFormatException e){
+                           System.out.println("Error in project's duration: " + e.getMessage());
+                       }
+                       project = new Project(aux[0],aux[1], date1, duration);
+
+                       if(fTask.exists() && fTask.isFile()){
+                           FileReader frTask = new FileReader(fTask);
+                           BufferedReader brTask = new BufferedReader(frTask);
+
+
+                       }else{
+                           System.out.println("Ficheiro Tasks não existe.");
+                       }
+
+
+
+                   }
+               }
+
+
+           } catch (FileNotFoundException ex) {
+               System.out.println("Erro a abrir ficheiro de texto.");
+           } catch (IOException ex) {
+               System.out.println("Erro a ler ficheiro de texto.");
+           }
+       }
+       else {
+           System.out.println("Ficheiro Projects não existe.");
+       }
+
+    }
 
     public void addProject(String name, String acronym, Date startDate, int duration){
         projects.add(new Project(name, acronym, startDate, duration));
@@ -149,14 +220,12 @@ public class CISUC {
         project.listNonInitialized();
     }
 
-    private void listOutOfDateTasks(Project project){
-        project.listOutOfDateTasks();
+    public Project createProject(){
+        Project proj = new Project();
+        return proj;
     }
 
-    public void listCompleteTasks(Project project) {
-        project.listCompleteTasks();
-    }
-
+    /*
     public Person createTeacher(String name, String email, int mechaNumber, String reserchArea){
         //String name, String eMail, int mechaNumber, String reserchArea
         Person person;
@@ -171,7 +240,8 @@ public class CISUC {
         person = new Bachelor(name, email, startDate, finalDate);
 
         return person;
-    }
+    }*/
+
     public void listAllPeople(){}
     public void listPersonTasks(){}
     public void listPersonProjects(){}
@@ -204,5 +274,12 @@ public class CISUC {
         person.addProjectToPerson(project);
     }
 
+    /*
+    public void register(){
+        Person newPerson = createPerson();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Insert your name:");
+        newPerson.name = sc.nextLine();
 
+    }*/
 }
