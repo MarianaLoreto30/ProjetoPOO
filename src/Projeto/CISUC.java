@@ -176,7 +176,7 @@ public class CISUC {
 
     public void listAllProjects(){
         for(int i = 0; i < projects.size(); i++){
-            System.out.println(i + "." + projects.get(i).getName());
+            System.out.println(i + '.' + projects.get(i).getName());
         }
     }
 
@@ -190,17 +190,32 @@ public class CISUC {
 
 
     public void removeProject(int index){
-        projects.remove(index);
+        if (index > projects.size()){
+            System.out.println("Invalid number!\n");
+        }
+        else {
+            projects.remove(index);
+        }
     }
 
     public void addTask(Project project, String type, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate){
-        switch(type){
-            case "Design":
-                project.addTask(new Design(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
-            case "Documentation":
-                project.addTask(new Documentation(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
-            case "Development":
-                project.addTask(new Development(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+        boolean a = true;
+        for (int i = 0; i < project.getTasksLen(); i++){
+            if (project.getTask(i).getName().equals(name)){
+                System.out.println("Already existing task!\n");
+                a = false;
+            }
+        }
+        if (a) {
+            switch (type) {
+                case "Design":
+                    project.addTask(new Design(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+                case "Documentation":
+                    project.addTask(new Documentation(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+                case "Development":
+                    project.addTask(new Development(name, startDate, endDate, duration, conclusionState, responsible, effortRate));
+
+            }
         }
     }
 
@@ -209,11 +224,21 @@ public class CISUC {
     }
 
     public void deleteTask(Project project, int index){
-        project.deleteTask(index);
+        if (index > project.getTasksLen()){
+            System.out.println("Invalid number!\n");
+        }
+        else {
+            project.deleteTask(index);
+        }
     }
 
     public void taskConclusionState(Project project, int index){
-        project.taskConclusionState(index);
+        if (index > project.getTasksLen()){
+            System.out.println("Invalid number!\n");
+        }
+        else {
+            project.taskConclusionState(index);
+        }
     }
 
     public void listNonInitialized(Project project){
@@ -247,7 +272,12 @@ public class CISUC {
     public void listPersonProjects(){}
 
     public void deleteProjectFromPerson(Person person, int index){
-        person.deleteProjectFromPerson(index);
+        if (index > person.getProjectsLen()){
+            System.out.println("Invalid number!\n");
+        }
+        else {
+            person.deleteProjectFromPerson(index);
+        }
     }
 
     public void addTask(Person person, Task task){
@@ -259,7 +289,13 @@ public class CISUC {
     }
 
     public void deleteTaskFromPerson(Person person, int index){
-        person.deleteTaskFromPerson(index);
+        if (index > person.getTasksLen()){
+            System.out.println("Invalid number!\n");
+        }
+        else {
+            person.deleteTaskFromPerson(index);
+        }
+
     }
 
     public void personAssociation(Person person, Project proj){

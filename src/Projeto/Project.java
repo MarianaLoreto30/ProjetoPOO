@@ -78,7 +78,7 @@ public class Project {
     }
 
     public void listCompleteTasks(){
-        System.out.println("Completed tasks:");      //como fazemos para delimitar os valores de conclusao?
+        System.out.println("Completed tasks:");
         int j = 1;
         for(int i = 0; i < tasks.size(); i++){
             if(taskConclusionState(i) == 100){
@@ -86,6 +86,14 @@ public class Project {
                 j++;
             }
         }
+    }
+
+    public Task getTask(int index){
+        return tasks.get(index);
+    }
+
+    public int getTasksLen(){
+        return tasks.size();
     }
 
     /*public double projectCost (){ !!nao aqui, na classe person!!

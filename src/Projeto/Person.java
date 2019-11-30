@@ -24,6 +24,7 @@ public abstract class Person {
     abstract int calcCost();
 
     public void addProjectToPerson(Project project){
+
         projects.add(project);
     }
 
@@ -49,6 +50,22 @@ public abstract class Person {
         } else {
             return false;
         }
+    }
+
+    public Project getProject(int index){
+        return projects.get(index);
+    }
+
+    public int getProjectsLen(){
+        return projects.size();
+    }
+
+    public Task getTask(int index){
+        return tasks.get(index);
+    }
+
+    public int getTasksLen(){
+        return tasks.size();
     }
 
     public String getName() {
