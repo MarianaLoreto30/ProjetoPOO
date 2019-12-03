@@ -1,3 +1,4 @@
 1 Grau;2 Estatuto;3 nome;4 e-mail;5 Orientador(es - separados por virgulas)/Bolseiros responsaveis;6 Projeto(s);7 Tarefa(s);8 data comeco/8 numMech;9 data final de bolsa/9 Area de pesquisa;
 Scolar;Bachelor;Mariana Loreto;marianaloreto30@hotmail.com;Luís Cordeiro;ProjetoPoo;Iniciar projeto,Criar classes,Ler fichero;20/11/2019;13/12/2019;
 Teacher;Investigador;Nome de Docente;e-mail@docente.com;Bolseiro1,Bloseiro2;Tratamento de dados,Desenvolvimento de sistemas computacionais;redação das conclusoes obtidas;123456789;AREA DE Pesquisa;
+Scolar;Master;Barbara Gonçalves;alguma_coisa@hotmail.com;Luís Cordeiro;ProjetoPoo;Interação com o utilizador;20/11/2019;13/12/2019;

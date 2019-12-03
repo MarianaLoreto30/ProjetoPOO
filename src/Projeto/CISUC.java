@@ -30,7 +30,7 @@ public class CISUC {
         String line;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date aux1 = new Date(), aux2 = new Date();
-        int mechaNumber= 0;
+        int mechaNumber= -1;
         people = new ArrayList<>();
 
         File f = new File("People.txt");
@@ -47,7 +47,17 @@ public class CISUC {
                         if (aux[0].equalsIgnoreCase("Teacher")) {
                             try {
                                 mechaNumber = Integer.parseInt(aux[7]);
-                            } catch (NumberFormatException e) {
+                                for(Person p: people){
+                                    if(p.calcCost()==0){ //Verifica se é teacher
+                                        Teacher t = (Teacher) p;
+                                        if(mechaNumber == t.getMechaNumber()){
+                                            System.out.println("MechaNumber already exists!");
+                                            mechaNumber=-1;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }catch (NumberFormatException e) {
                                 System.out.println("Erro ao converter mechaNumber: " + e.getMessage());
                             }
 
@@ -142,13 +152,16 @@ public class CISUC {
                            System.out.println("Error in project's duration: " + e.getMessage());
                        }
                        project = new Project(aux[0],aux[1], date1, duration);
+                       //addProject(aux[0], aux[1], date1, duration);
 
                        if(fTask.exists() && fTask.isFile()){
                            FileReader frTask = new FileReader(fTask);
                            BufferedReader brTask = new BufferedReader(frTask);
 
 
-                       }else{
+
+                       }
+                       else{
                            System.out.println("Ficheiro Tasks não existe.");
                        }
 
@@ -268,7 +281,9 @@ public class CISUC {
     }*/
 
     public void listAllPeople(){}
+
     public void listPersonTasks(){}
+
     public void listPersonProjects(){}
 
     public void deleteProjectFromPerson(Person person, int index){
