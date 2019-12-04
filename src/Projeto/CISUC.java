@@ -46,7 +46,7 @@ public class CISUC {
                         //FALTA ASSOCIAR Bolseiros
                         if (aux[0].equalsIgnoreCase("Teacher")) {
                             try {
-                                mechaNumber = Integer.parseInt(aux[7]);
+                                mechaNumber = Integer.parseInt(aux[5]);
                                 for(Person p: people){
                                     if(p.calcCost()==0){ //Verifica se é teacher
                                         Teacher t = (Teacher) p;
@@ -61,7 +61,7 @@ public class CISUC {
                                 System.out.println("Erro ao converter mechaNumber: " + e.getMessage());
                             }
 
-                            person = new Teacher(aux[2], aux[3], mechaNumber, aux[8]);
+                            person = new Teacher(aux[2], aux[3], mechaNumber, aux[6]);
 
                             //Tenho de criar tarefa para adicionar! Provavelmente é necessário um ficheiro só para tarefas!!
 
@@ -75,8 +75,8 @@ public class CISUC {
                         else if (aux[0].equalsIgnoreCase("Scholar")) {
 
                             try {
-                                aux1 = format.parse(aux[7]);
-                                aux2 = format.parse(aux[8]);
+                                aux1 = format.parse(aux[5]);
+                                aux2 = format.parse(aux[6]);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 System.out.println("Erro na data do bolseiro.");
@@ -113,15 +113,17 @@ public class CISUC {
    public void readFileProjects(){
         projects= new ArrayList<>();
         Project project;
+        Task task;
         String line;
         String[] aux;
         boolean safe;
        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-       Date date1 = new Date();
-       int duration = 0;
+       Date date1, date2;
+       int duration = 0, index = 0, conclusionState = 0;
+       double effortRate = 0.0 ;
 
        File fProj = new File("Projects.txt");
-       File fTask = new File("Tasks.txt");
+       //File fTask = new File("Tasks.txt");
 
        if(fProj.exists() && fProj.isFile()) {
            try{
@@ -129,42 +131,75 @@ public class CISUC {
                BufferedReader br = new BufferedReader(fr);
 
                while((line = br.readLine()) != null) {
+                   date1 = new Date();
+                   date2 = new Date();
+
                    System.out.println(line);
                    aux = line.split(";");
                    safe=true;
 
-                   for (Project p: projects){
-                       if( aux[0].equalsIgnoreCase(p.getName()) ){
-                           System.out.println("Erro: nome do projeto já existe");
-                           safe=false; //ignoro este projeto
-                           break;
+                   if(aux[0].equalsIgnoreCase("PROJECT")){
+
+                       for (Project p: projects){
+                           if( aux[1].equalsIgnoreCase(p.getName()) ){
+                               System.out.println("Erro: nome do projeto já existe");
+                               safe=false; //ignoro este projeto
+                               break;
+                           }
+                       }
+
+                       if(safe==true){
+                           try {
+                               date1 = format.parse(aux[4]);
+                               index=Integer.parseInt(aux[1]);
+                               duration = Integer.parseInt(aux[5]);
+                           } catch (ParseException e) {
+                               e.printStackTrace();
+                               System.out.println("Error in date: " + e.getMessage());
+                           } catch (NumberFormatException e){
+                               System.out.println("Error in conversion: " + e.getMessage());
+                           }
+                           project = new Project(index, aux[2],aux[3], date1, duration);
+
+                           //addProject(aux[1], aux[2], date1, duration);
                        }
                    }
-
-                   if(safe==true){
-                       try {
-                           date1 = format.parse(aux[2]);
-                           duration = Integer.parseInt(aux[3]);
-                       } catch (ParseException e) {
+                   else if(aux[0].equalsIgnoreCase("TASK")){
+                       try{
+                           index=Integer.parseInt(aux[1]);
+                       } catch (NumberFormatException e) {
                            e.printStackTrace();
-                           System.out.println("Error in date: " + e.getMessage());
-                       } catch (NumberFormatException e){
-                           System.out.println("Error in project's duration: " + e.getMessage());
                        }
-                       project = new Project(aux[0],aux[1], date1, duration);
-                       //addProject(aux[0], aux[1], date1, duration);
+                       for(Project p: projects){
+                           for(Person personAux: people){
+                               if(p.getIndex() == index && aux[2].equalsIgnoreCase(personAux.getName())){
 
-                       if(fTask.exists() && fTask.isFile()){
-                           FileReader frTask = new FileReader(fTask);
-                           BufferedReader brTask = new BufferedReader(frTask);
+                                   try{
+                                       date1 = format.parse(aux[4]);
+                                       date2 = format.parse(aux[5]);
+                                       duration = Integer.parseInt(aux[6]);
+                                       conclusionState= Integer.parseInt(aux[7]);
+                                       effortRate=Double.parseDouble(aux[8]);
+                                   } catch (NumberFormatException e) {
+                                       System.out.println("Erro in conversion " + e.getMessage());
+                                   } catch (ParseException e) {
+                                       e.printStackTrace();
+                                       System.out.println("Error in date: " + e.getMessage());
+                                   }
 
-
+                                   if(effortRate == 0.25){ //Documentation
+                                       task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, effortRate);
+                                   }
+                                   else if(effortRate == 0.5){ //Design
+                                       task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, effortRate);
+                                   }
+                                   else if(effortRate == 1.00){ //Design
+                                       task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, effortRate);
+                                   }
+                               }
+                           }
 
                        }
-                       else{
-                           System.out.println("Ficheiro Tasks não existe.");
-                       }
-
 
 
                    }
@@ -183,8 +218,8 @@ public class CISUC {
 
     }
 
-    public void addProject(String name, String acronym, Date startDate, int duration){
-        projects.add(new Project(name, acronym, startDate, duration));
+    public void addProject(int index, String name, String acronym, Date startDate, int duration){
+        projects.add(new Project(index, name, acronym, startDate, duration));
     }
 
     public void listAllProjects(){
@@ -197,8 +232,8 @@ public class CISUC {
         project.listProjectFeatures(index);
     }
 
-    public void listPeopleinProject(Project project){
-        project.listPeopleinProject();
+    public void listPeopleInProject(Project project){
+        project.listPeopleInProject();
     }
 
 

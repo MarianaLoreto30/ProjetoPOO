@@ -10,13 +10,13 @@ public abstract class Task {
     private int duration;
     private int conclusionState;
     private Person responsible;
-    private float effortRate;
+    private double effortRate;
 
     public Task(){
 
     }
 
-    public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+    public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,double effortRate) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -79,11 +79,11 @@ public abstract class Task {
         this.responsible = responsible;
     }
 
-    public float getEffortRate() {
+    public double  getEffortRate() {
         return effortRate;
     }
 
-    public void setEffortRate(float effortRate) {
+    public void setEffortRate(double  effortRate) {
         this.effortRate = effortRate;
     }
 }

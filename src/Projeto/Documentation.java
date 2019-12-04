@@ -7,7 +7,7 @@ public class Documentation extends Task {
     public Documentation() {
     }
 
-    public Documentation(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, float effortRate) {
+    public Documentation(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate) {
         super(name, startDate, endDate, duration, conclusionState, responsible, effortRate);
     }
 

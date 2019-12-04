@@ -3,7 +3,9 @@ package Projeto;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 public class Project {
+    private int index;
     private String name;
     private String acronym;
     private Date startDate;
@@ -18,7 +20,8 @@ public class Project {
 
     }
 
-    public Project(String name, String acronym, Date startDate, int duration) {
+    public Project(int index, String name, String acronym, Date startDate, int duration) {
+        this.index = index;
         this.name = name;
         this.acronym = acronym;
         this.startDate = startDate;
@@ -29,7 +32,7 @@ public class Project {
         System.out.println("-Name: " + getName() + '\n' + "-Acronym: " + getAcronym() + '\n' + "-Start date: " + getStartDate() + '\n' + "-Duration: " + getDuration());
     }
 
-    public void listPeopleinProject(){
+    public void listPeopleInProject(){
         for(int i = 0; i < people.size(); i++){
             System.out.println(i + '.' + people.get(i).name);
         }
@@ -88,6 +91,14 @@ public class Project {
         }
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public Task getTask(int index){
         return tasks.get(index);
     }
@@ -96,9 +107,9 @@ public class Project {
         return tasks.size();
     }
 
-    /*public double projectCost (){ !!nao aqui, na classe person!!
+    public double projectCost (){
         return 0.0;
-    }*/
+    }
 
     public void finishProject(){ // ainda nao sei o que fazer aqui
 
