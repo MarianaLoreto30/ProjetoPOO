@@ -11,8 +11,8 @@ public class Bachelor extends Scholar {
         super(startDate, finalDate);
     }
 
-    public Bachelor(String name, String eMail, Date startDate, Date finalDate) {
-        super(name, eMail, startDate, finalDate);
+    public Bachelor(String name, String eMail, Date startDate, Date finalDate, int index) {
+        super(name, eMail, startDate, finalDate, index);
     }
 
 
