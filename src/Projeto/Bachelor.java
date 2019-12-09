@@ -7,8 +7,8 @@ public class Bachelor extends Scholar {
 
     private ArrayList<Teacher> adivisor;
 
-    public Bachelor(Date startDate, Date finalDate) {
-        super(startDate, finalDate);
+    public Bachelor(Date startDate, Date finalDate, int index) {
+        super(startDate, finalDate, index);
     }
 
     public Bachelor(String name, String eMail, Date startDate, Date finalDate, int index) {
