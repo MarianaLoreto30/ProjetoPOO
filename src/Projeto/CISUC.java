@@ -15,9 +15,14 @@ public class CISUC {
     }
     private ArrayList<Person> people;
     private ArrayList<Project> projects;
+    private GraphicalUserInterface gui;
 
     public CISUC(){
         readFilePeople();
+
+
+        gui = new GraphicalUserInterface(this);
+        gui.setVisible(true);
 
     }
 
@@ -109,7 +114,9 @@ public class CISUC {
         }
     }
 
-
+    /**
+     * read and create projects and tasks from the file "Projects.txt"
+     */
    public void readFileProjects(){
         projects= new ArrayList<>();
         Project project;
@@ -123,7 +130,6 @@ public class CISUC {
        double effortRate = 0.0 ;
 
        File fProj = new File("Projects.txt");
-       //File fTask = new File("Tasks.txt");
 
        if(fProj.exists() && fProj.isFile()) {
            try{

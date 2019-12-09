@@ -11,12 +11,13 @@ public abstract class Task {
     private int conclusionState;
     private Person responsible;
     private double effortRate;
+    private int index;
 
     public Task(){
 
     }
 
-    public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,double effortRate) {
+    public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,double effortRate, int index) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -24,12 +25,21 @@ public abstract class Task {
         this.conclusionState = conclusionState;
         this.responsible = responsible;
         this.effortRate = effortRate;
+        this.index=index;
     }
 
 
     abstract boolean checkOverload();
 
     // Getters and Setters
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public String getName() {
         return name;
@@ -86,4 +96,7 @@ public abstract class Task {
     public void setEffortRate(double  effortRate) {
         this.effortRate = effortRate;
     }
+
 }
+
+

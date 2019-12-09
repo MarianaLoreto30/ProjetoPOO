@@ -1,8 +1,10 @@
 package Projeto;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Doctor extends  Scholar{
+
     public Doctor(Date startDate, Date finalDate) {
         super(startDate, finalDate);
     }
