@@ -18,4 +18,12 @@ public class Master extends  Scholar {
     public int calcCost(){
         return 800;
     }
+
+    public int addTeacher(Teacher t, int index){
+        if(projects.get(0).getIndex() == index){
+            adivisor.add(t);
+            return 1;
+        }
+        return 0;
+    }
 }

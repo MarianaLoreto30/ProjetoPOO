@@ -17,4 +17,7 @@ public class Doctor extends  Scholar{
         return 1000;
     }
 
+    public int addTeacher(Teacher t, int index){
+        return 0;
+    }
 }

@@ -1,5 +1,6 @@
 package Projeto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,12 +13,14 @@ public class Project {
     private int duration;
     private ArrayList<Task> tasks;
     private ArrayList<Person> people;
+    private Teacher principal;
 
     public Project(){
         name ="Unknown";
+        acronym="UKN";
+        principal=new Teacher();
         tasks = new ArrayList<>();
         people = new  ArrayList<>();
-
     }
 
     public Project(int index, String name, String acronym, Date startDate, int duration) {

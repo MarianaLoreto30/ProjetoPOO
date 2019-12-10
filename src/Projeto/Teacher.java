@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Teacher extends Person{
     private int mechaNumber;
     private String reserchArea;
-    //private ArrayList<Scholar> scholars;
+    private ArrayList<Scholar> scholars;
 
     public Teacher(){
         mechaNumber=0;
         reserchArea="Reserch area: unknown";
-        //scholars = new ArrayList<>();
+        scholars = new ArrayList<>();
     }
 
     public Teacher(int mechaNumber, String reserchArea) {
@@ -23,10 +23,30 @@ public class Teacher extends Person{
         this.mechaNumber = mechaNumber;
         this.reserchArea = reserchArea;
     }
-    /*
-    public void addScholars(Scholar scholar){
-        scholars.add(scholar);
-    }*/
+
+    /**
+     * associate a scholar to the teacher
+     * @param scholar must be a bachelor or a master (in case of being doctor return 0)
+     * @return 1 in success or 0 in error
+     */
+    public int addScholars(Scholar scholar){
+        if(scholar.calcCost()<=800){
+            for (int i = 0; i < projects.size(); i++) {
+                if(scholar.getProject(0).getIndex() == projects.get(i).getIndex()){
+                    scholars.add(scholar);
+                    if(scholar.addTeacher(this, projects.get(i).getIndex())==1){
+                        return 1;
+                    }
+                    return 0;
+                }
+            }
+        }
+        return 0; //não foi adicionado, pois o docente e o bolseiro não pertencem ao mesmo projeto (ou o bolseiro é doctor)
+    }
+
+    public void addProjectToPerson(Project project){
+        projects.add(project);
+    }
 
     public int calcCost(){
         return 0;

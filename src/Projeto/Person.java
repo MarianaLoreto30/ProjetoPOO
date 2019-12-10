@@ -6,7 +6,7 @@ public abstract class Person {
 
     protected String name;
     protected String email;
-    private ArrayList<Project> projects;
+    protected ArrayList<Project> projects;
     private ArrayList<Task> tasks;
 
     public Person(){
@@ -23,13 +23,11 @@ public abstract class Person {
 
     abstract int calcCost();
 
-    public void addProjectToPerson(Project project){
-
-        projects.add(project);
-    }
+    abstract void addProjectToPerson(Project project);
 
     public void deleteProjectFromPerson(int index){
-        projects.remove(index);
+        projects.remove(index);//??
+        //projects.remove(project);
     }
 
     public void addTaskToPerson(Task task){

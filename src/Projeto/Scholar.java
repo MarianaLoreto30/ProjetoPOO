@@ -21,7 +21,23 @@ public abstract class Scholar extends Person {
         this.index=index;
     }
 
+    public void addProjectToPerson(Project project){
+        if(projects.size() < 1 ){
+            projects.add(project);
+        }
+        else{
+            System.out.println("Scolar already has a project");
+        }
+    }
     abstract int calcCost();
+
+    /**
+     * add Teacher to the Scholar (only for bachelor and master)
+     * @param t teacher that will be response for the scholar
+     * @param index of the project
+     * @return 1 in success or 0 in error
+     */
+    abstract int addTeacher(Teacher t, int index);
 
     public int getIndex() {
         return index;
