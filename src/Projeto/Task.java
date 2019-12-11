@@ -1,8 +1,9 @@
 package Projeto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Task {
+public abstract class Task implements Serializable {
 
     private String name;
     private Date startDate;
@@ -30,6 +31,10 @@ public abstract class Task {
 
 
     abstract boolean checkOverload();
+
+    public void addPersonToTask(Person person) {
+        setResponsible(person);
+    }
 
     // Getters and Setters
 

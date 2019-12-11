@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class CISUC {
+public class CISUC implements Serializable{
 
     public static void main(String[] args) {
-
         new CISUC();
     }
     private ArrayList<Person> people;
@@ -19,12 +18,21 @@ public class CISUC {
 
     public CISUC(){
         readFilePeople();
-        listAllPeople();
+        readFileProjects();
+        writeObjectsFile();
 
+        /*for(Project p: projects){
+            System.out.println(p.toString());
+            listPeopleInProject(p);
+        }*/
 
+        /*for(Person p: people){
+            listAllAssociates(p);
+        }*/
+
+        /*
         gui = new GraphicalUserInterface(this);
-        gui.setVisible(true);
-
+        gui.setVisible(true);*/
     }
 
     /**
@@ -35,8 +43,8 @@ public class CISUC {
         String[] aux, associates;
         String line;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date aux1 = new Date(), aux2 = new Date();
-        int mechaNumber= -1, index =-1;
+        Date aux1, aux2;
+        int mechaNumber, index;
         people = new ArrayList<>();
 
         File f = new File("People.txt");
@@ -62,30 +70,40 @@ public class CISUC {
                                         }
                                     }
                                 }
+
+                                person = new Teacher(aux[2], aux[3], mechaNumber, aux[6]);
+                                if(!people.contains(person)){
+                                    people.add(person);
+                                }
+
+                                Teacher t = (Teacher) person;
+
+                                associates = aux[4].split(",");
+                                for(int i=0; i<associates.length; i++){
+                                    index = Integer.parseInt(associates[i]);
+                                    for(Person p: people){
+                                        if(p.calcCost()!=0){
+                                            Scholar s = (Scholar) p;
+                                            if(s.getIndex() == index){
+                                                t.addScholarsFile(s);
+                                            }
+                                        }
+                                    }
+                                }
+
                             }catch (NumberFormatException e) {
-                                System.out.println("Erro ao converter mechaNumber: " + e.getMessage());
-                            }
-
-                            person = new Teacher(aux[2], aux[3], mechaNumber, aux[6]);
-
-                            try{
-                                people.add(person);
+                                System.out.println("Erro ao converter number: " + e.getMessage());
                             }catch (NullPointerException e){
                                 System.out.println("Erro ao adicionar na lista: " + e.getMessage());
                             }
+
                         }
-                        //FALTA ASSOCIAR ORIENTADORES
                         else if (aux[0].equalsIgnoreCase("Scholar")) {
 
                             try {
                                 aux1 = format.parse(aux[4]);
                                 aux2 = format.parse(aux[5]);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                                System.out.println("Erro na data do bolseiro.");
-                            }
 
-                            try {
                                 index = Integer.parseInt(aux[6]);
                                 for(Person p: people){
                                     if(p.calcCost()>0){ //Verifica se é bolseiro
@@ -97,20 +115,33 @@ public class CISUC {
                                         }
                                     }
                                 }
-                            }catch (NumberFormatException e) {
+
+                                if (aux[1].equalsIgnoreCase("Bachelor")) {
+                                    person = new Bachelor(aux[2], aux[3], aux1, aux2, index);
+                                    if(!people.contains(person)){
+                                        people.add(person);
+                                    }
+                                } else if (aux[1].equalsIgnoreCase("Master")) {
+                                    person = new Master(aux[2], aux[3], aux1, aux2, index);
+                                    if(!people.contains(person)){
+                                        people.add(person);
+                                    }
+                                } else if (aux[1].equalsIgnoreCase("Doctor")) {
+                                    person = new Doctor(aux[2], aux[3], aux1, aux2, index);
+                                    if(!people.contains(person)){
+                                        people.add(person);
+                                    }
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                System.out.println("Erro na data do bolseiro.");
+                            } catch (NumberFormatException e) {
                                 System.out.println("Erro ao converter Index Number: " + e.getMessage());
+                            }catch (NullPointerException e){
+                                System.out.println("Erro ao adicionar na lista: " + e.getMessage());
                             }
 
-                            if (aux[1].equalsIgnoreCase("Bachelor")) {
-                                person = new Bachelor(aux[2], aux[3], aux1, aux2, index);
-                                people.add(person);
-                            } else if (aux[1].equalsIgnoreCase("Master")) {
-                                person = new Master(aux[2], aux[3], aux1, aux2, index);
-                                people.add(person);
-                            } else if (aux[1].equalsIgnoreCase("Doctor")) {
-                                person = new Doctor(aux[2], aux[3], aux1, aux2, index);
-                                people.add(person);
-                            }
                         }
                     }catch (IndexOutOfBoundsException e){
                         System.out.println("Erro de indexação: " + e.getMessage());
@@ -135,12 +166,13 @@ public class CISUC {
         Project project;
         Task task;
         String line;
-        String[] aux;
-        boolean safe;
+        String[] aux, peopleProject;
        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
        Date date1, date2;
-       int duration = 0, indexP = 0, indexT=0, indexPessoa =0, indexPessoaF = 0, conclusionState = 0;
+       int duration = 0, indexP = 0, indexT=0, indexPerson, indexR, conclusionState = 0;
        double effortRate = 0.0 ;
+       boolean safe;
+       projects=new ArrayList<>();
 
        File fProj = new File("Projects.txt");
 
@@ -153,87 +185,148 @@ public class CISUC {
                    date1 = new Date();
                    date2 = new Date();
 
-                   System.out.println(line);
                    aux = line.split(";");
-                   safe=true;
+                   safe=false;
+                   if(aux[0].equalsIgnoreCase("PROJECT") && aux.length == 8){
 
-                   if(aux[0].equalsIgnoreCase("PROJECT")){
-
-                       for (Project p: projects){
-                           if( aux[1].equalsIgnoreCase(p.getName()) ){
-                               System.out.println("Erro: nome do projeto já existe");
-                               safe=false; //ignoro este projeto
-                               break;
+                       try {
+                           indexP=Integer.parseInt(aux[1]);
+                           if(projects.isEmpty()){
+                               safe=true;
                            }
+                           for (Project p: projects){
+                               if( p.getIndex() != indexP && indexP !=0/*|| aux[2].equalsIgnoreCase(p.getName())*/){
+                                   safe=true;
+                                   break;
+                               }
+                           }
+                       } catch (NumberFormatException e){
+                           System.out.println("Error in conversion project's index: " + e.getMessage());
                        }
 
-                       if(safe==true){
+                       if(safe){
                            try {
                                date1 = format.parse(aux[4]);
-                               indexP=Integer.parseInt(aux[1]);
                                duration = Integer.parseInt(aux[5]);
+                               indexR = Integer.parseInt(aux[7]);
+
+                               project = new Project(indexP, aux[2],aux[3], date1, duration);
+
+                               peopleProject = aux[6].split(",");
+                               for (int i = 0; i < peopleProject.length; i++) {
+                                   try{
+                                       indexPerson = Integer.parseInt(peopleProject[i]);
+                                       for(Person personAux: people){
+                                           if(personAux.calcCost()==0){
+                                               Teacher t = (Teacher) personAux;
+                                               if(indexPerson == t.getMechaNumber()){
+                                                   addProjectToPerson(personAux, project);
+                                                   addPersonToProject(personAux, project);
+                                               }
+                                               else if(indexR == t.getMechaNumber()){
+                                                   if(!project.getPeople().contains(t)){
+                                                       addProjectToPerson(personAux, project);
+                                                       addPersonToProject(personAux, project);
+                                                   }
+                                                   project.setPrincipal(t);
+                                               }
+                                           }
+                                           else{
+                                               Scholar s =(Scholar) personAux;
+                                               if(indexPerson == s.getIndex()){
+                                                   addProjectToPerson(personAux, project);
+                                                   addPersonToProject(personAux, project);
+                                               }
+                                           }
+                                       }
+
+                                       for(Person person: project.getPeople()){
+                                           if(person.calcCost()==0){
+                                               Teacher t = (Teacher) person;
+                                               ArrayList<Scholar> exemplo = new ArrayList<>();
+                                               for(Scholar s: t.getScholars()){
+                                                   exemplo.add(s);
+                                               }
+                                               for(Scholar s: exemplo){
+                                                   t.addScholars(s);
+                                               }
+                                           }
+                                       }
+
+                                   }catch (NumberFormatException e){
+                                       System.out.println("Error in conversion person's index: " + e.getMessage());
+                                   }
+                               }
+                               projects.add(project);
+
                            } catch (ParseException e) {
                                e.printStackTrace();
                                System.out.println("Error in date: " + e.getMessage());
                            } catch (NumberFormatException e){
                                System.out.println("Error in conversion: " + e.getMessage());
+                           } catch (NullPointerException e ){
+                               System.out.println("Error in adding to the ArrayList: " + e.getMessage());
                            }
-                           project = new Project(indexT, aux[2],aux[3], date1, duration);
-
-                           //addProject(index, aux[1], aux[2], date1, duration);
                        }
                    }
-                   else if(aux[0].equalsIgnoreCase("TASK")){
+                   else if(aux[0].equalsIgnoreCase("TASK") && aux.length == 10){
                        try{
-                           indexP=Integer.parseInt(aux[1]);
-                           indexPessoaF=Integer.parseInt(aux[2]);
-                       } catch (NumberFormatException e) {
-                           e.printStackTrace();
-                       }
-                       for(Project p: projects){
-                           for(Person personAux: people){
-                               if(personAux.calcCost()==0){
-                                   Teacher t = (Teacher) personAux;
-                                   indexPessoa = t.getMechaNumber();
-                               }
-                               else{
-                                   Scholar s = (Scholar) personAux;
-                                   indexPessoa = s.getIndex();
-                               }
-                               if(p.getIndex() == indexP &&  indexPessoaF == indexPessoa){
+                           indexP=Integer.parseInt(aux[1]); //index do projeto
+                           indexR=Integer.parseInt(aux[2]); //index da pessoa responsável
 
-                                   try{
-                                       date1 = format.parse(aux[4]);
-                                       date2 = format.parse(aux[5]);
-                                       duration = Integer.parseInt(aux[6]);
-                                       conclusionState= Integer.parseInt(aux[7]);
-                                       effortRate=Double.parseDouble(aux[8]);
-                                       indexT=Integer.parseInt(aux[9]);
-                                   } catch (NumberFormatException e) {
-                                       System.out.println("Erro in conversion " + e.getMessage());
-                                   } catch (ParseException e) {
-                                       e.printStackTrace();
-                                       System.out.println("Error in date: " + e.getMessage());
+                           for(Project p: projects){
+                               for(Person personAux: p.getPeople()){
+                                   if(personAux.calcCost()==0){
+                                       Teacher t = (Teacher) personAux;
+                                       indexPerson = t.getMechaNumber();
                                    }
+                                   else{
+                                       Scholar s = (Scholar) personAux;
+                                       indexPerson = s.getIndex();
+                                   }
+                                   if(p.getIndex() == indexP &&  indexR == indexPerson){
 
-                                   if(effortRate == 0.25){ //Documentation
-                                       task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
-                                   }
-                                   else if(effortRate == 0.5){ //Design
-                                       task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
-                                   }
-                                   else if(effortRate == 1.00){ //Design
-                                       task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
+                                       try{
+                                           date1 = format.parse(aux[4]);
+                                           date2 = format.parse(aux[5]);
+                                           duration = Integer.parseInt(aux[6]);
+                                           conclusionState= Integer.parseInt(aux[7]);
+                                           effortRate=Double.parseDouble(aux[8]);
+                                           indexT=Integer.parseInt(aux[9]);
+                                       } catch (NumberFormatException e) {
+                                           System.out.println("Erro in conversion " + e.getMessage());
+                                       } catch (ParseException e) {
+                                           e.printStackTrace();
+                                           System.out.println("Error in date: " + e.getMessage());
+                                       }
+
+                                       if(effortRate == 0.25){ //Documentation
+                                           task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
+                                           p.addTask(task);
+                                           personAux.addTaskToPerson(task);
+                                           task.addPersonToTask(personAux);
+                                       }
+                                       else if(effortRate == 0.5){ //Design
+                                           task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
+                                           p.addTask(task);
+                                           personAux.addTaskToPerson(task);
+                                           task.addPersonToTask(personAux);
+                                       }
+                                       else if(effortRate == 1.00){ //Design
+                                           task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
+                                           p.addTask(task);
+                                           personAux.addTaskToPerson(task);
+                                           task.addPersonToTask(personAux);
+                                       }
                                    }
                                }
                            }
-
+                       } catch (NumberFormatException e) {
+                           System.out.println("Error in conversion:  "+ e.getMessage());
                        }
 
                    }
                }
-
-
            } catch (FileNotFoundException ex) {
                System.out.println("Erro a abrir ficheiro de texto.");
            } catch (IOException ex) {
@@ -246,13 +339,51 @@ public class CISUC {
 
     }
 
+
+    public void writeObjectsFile(){
+        File fproject = new File("Project.obj");
+        File fperson = new File("Person.obj");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(fproject);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            for(Project p: projects){
+                oos.writeObject(p);
+            }
+            oos.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Error creating project's file: " + e.getMessage());
+        }
+        catch (IOException e) {
+            System.out.println("Error writing in project's file:" + e.getMessage());
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(fperson);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            for(Person p: people){
+                oos.writeObject(p);
+            }
+            oos.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Error creating person's file: " + e.getMessage());
+        }
+        catch (IOException e) {
+            System.out.println("Error writing in person's file:" + e.getMessage());
+        }
+
+
+    }
+
     public void addProject(int index, String name, String acronym, Date startDate, int duration){
         projects.add(new Project(index, name, acronym, startDate, duration));
     }
 
     public void listAllProjects(){
         for(int i = 0; i < projects.size(); i++){
-            System.out.println(i + '.' + projects.get(i).getName());
+            System.out.println(projects.get(i).getIndex() + ". " + projects.get(i).getName());
         }
     }
 
@@ -264,14 +395,15 @@ public class CISUC {
         project.listPeopleInProject();
     }
 
-
-    public void removeProject(int index){
-        if (index > projects.size()){
-            System.out.println("Invalid number!\n");
+    //NAO DEVEMOS REMOVER PROJETO!!
+    public boolean removeProject(int index){
+        for(Project p: projects){
+            if(index == p.getIndex()){
+                projects.remove(p);
+                return true;
+            }
         }
-        else {
-            projects.remove(index);
-        }
+        return false;
     }
 
     public void addTask(int index, Project project, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate){
@@ -345,7 +477,32 @@ public class CISUC {
 
     public void listAllPeople(){
         for (int i = 0; i < people.size(); i++) {
-            System.out.println(people.get(i).name +"\n" + people.get(i).email);
+            if(people.get(i).calcCost() == 0){
+                System.out.println("Teacher: " + people.get(i).getName() +" - " + people.get(i).getEmail());
+            }
+            else{
+                System.out.println("Scholar: " + people.get(i).getName() +" - " + people.get(i).getEmail());
+            }
+        }
+    }
+
+    public void listAllAssociates(Person person){
+        if(person.calcCost()==0){
+            System.out.println("\n" + person.getName() + " - scholars in charge of:");
+            Teacher t =(Teacher) person;
+            for(Scholar s: t.getScholars()){
+                System.out.println(s.getName());
+            }
+        }
+        else if(person.calcCost()<=800){
+            System.out.println("\n" + person.getName() + " - advisers:");
+            Scholar s= (Scholar) person;
+            for(Teacher t: s.getAdviser()){
+                System.out.println(t.getName());
+            }
+        }
+        else{
+            System.out.println("\n"+ person.getName() +"- doctors don't have advisers");
         }
     }
 
@@ -362,8 +519,12 @@ public class CISUC {
         }
     }
 
-    public void addTask(Person person, Task task){
-        person.addTaskToPerson(task);
+    public void addPersonToTask(Person person, Task task){
+        for (int i = 0; i < person.getTasksLen(); i++) {
+            if(person.getTask(i).getIndex()==task.getIndex()){
+                task.addPersonToTask(person);
+            }
+        }
     }
 
     public void addTaskToPerson(Person person, Task task){
@@ -391,12 +552,16 @@ public class CISUC {
         person.addProjectToPerson(project);
     }
 
+    public void addPersonToProject(Person person, Project project){
+        project.addPersonToProject(person);
+    }
+
     /*
     public void register(){
         Person newPerson = createPerson();
         Scanner sc = new Scanner(System.in);
         System.out.print("Insert your name:");
-        newPerson.name = sc.nextLine();
+        newPerson.getName() = sc.nextLine();
 
     }*/
 }

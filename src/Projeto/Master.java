@@ -5,25 +5,31 @@ import java.util.Date;
 
 public class Master extends  Scholar {
 
-    private ArrayList<Teacher> adivisor;
+    private ArrayList<Teacher> adviser;
 
     public Master(Date startDate, Date finalDate, int index) {
         super(startDate, finalDate, index);
+        this.adviser= new ArrayList<>();
     }
 
     public Master(String name, String eMail, Date startDate, Date finalDate, int index) {
         super(name, eMail, startDate, finalDate, index);
+        this.adviser= new ArrayList<>();
     }
 
     public int calcCost(){
         return 800;
     }
 
-    public int addTeacher(Teacher t, int index){
-        if(projects.get(0).getIndex() == index){
-            adivisor.add(t);
-            return 1;
+    public boolean addTeacher(Teacher t, int index){
+        if(getProjects().get(0).getIndex() == index && !adviser.contains(t)){
+            adviser.add(t);
+            return true;
         }
-        return 0;
+        return false;
+    }
+
+    public  ArrayList<Teacher> getAdviser(){
+        return adviser;
     }
 }

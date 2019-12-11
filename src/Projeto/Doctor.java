@@ -17,7 +17,11 @@ public class Doctor extends  Scholar{
         return 1000;
     }
 
-    public int addTeacher(Teacher t, int index){
-        return 0;
+    public boolean addTeacher(Teacher t, int index){
+        return false;
+    }
+
+    public ArrayList<Teacher> getAdviser(){
+        return null;
     }
 }

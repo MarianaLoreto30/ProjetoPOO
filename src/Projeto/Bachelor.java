@@ -5,14 +5,16 @@ import java.util.Date;
 
 public class Bachelor extends Scholar {
 
-    private ArrayList<Teacher> adivisor;
+    private ArrayList<Teacher> adviser;
 
     public Bachelor(Date startDate, Date finalDate, int index) {
         super(startDate, finalDate, index);
+        this.adviser= new ArrayList<>();
     }
 
     public Bachelor(String name, String eMail, Date startDate, Date finalDate, int index) {
         super(name, eMail, startDate, finalDate, index);
+        this.adviser= new ArrayList<>();
     }
 
 
@@ -20,11 +22,18 @@ public class Bachelor extends Scholar {
         return 500;
     }
 
-    public int addTeacher(Teacher t, int index){
-        if(projects.get(0).getIndex() == index){
-            adivisor.add(t);
-            return 1;
+    public boolean addTeacher(Teacher t, int index){
+        if(getProjects().get(0).getIndex() == index && !adviser.contains(t)){
+            adviser.add(t);
+            return true;
         }
-        return 0;
+        else if(adviser.contains(t)){
+            return true;
+        }
+        return false;
+    }
+
+    public  ArrayList<Teacher> getAdviser(){
+        return adviser;
     }
 }

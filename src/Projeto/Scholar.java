@@ -1,5 +1,6 @@
 package Projeto;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Scholar extends Person {
@@ -21,23 +22,31 @@ public abstract class Scholar extends Person {
         this.index=index;
     }
 
-    public void addProjectToPerson(Project project){
-        if(projects.size() < 1 ){
-            projects.add(project);
+    /**
+     * Add (only) a project to a scholar
+     * @param project
+     */
+    public boolean addProjectToPerson(Project project){
+        if(getProjects().size() < 1 ){
+            getProjects().add(project);
+            return true;
         }
         else{
-            System.out.println("Scolar already has a project");
+            return false;
         }
     }
+
     abstract int calcCost();
 
     /**
      * add Teacher to the Scholar (only for bachelor and master)
      * @param t teacher that will be response for the scholar
      * @param index of the project
-     * @return 1 in success or 0 in error
+     * @return true in success or false in error
      */
-    abstract int addTeacher(Teacher t, int index);
+    abstract boolean addTeacher(Teacher t, int index);
+
+    abstract ArrayList<Teacher> getAdviser();
 
     public int getIndex() {
         return index;
@@ -63,4 +72,8 @@ public abstract class Scholar extends Person {
         this.finalDate = finalDate;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "-> Scholar. startDate: " + startDate + ", finalDate: " + finalDate + ", index: " + index;
+    }
 }

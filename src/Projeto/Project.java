@@ -1,11 +1,14 @@
 package Projeto;
 
+import java.io.Serializable;
+import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Project {
+public class Project implements Serializable {
     private int index;
     private String name;
     private String acronym;
@@ -29,6 +32,8 @@ public class Project {
         this.acronym = acronym;
         this.startDate = startDate;
         this.duration = duration;
+        tasks = new ArrayList<>();
+        people = new  ArrayList<>();
     }
 
     public void listProjectFeatures(int index){
@@ -37,7 +42,7 @@ public class Project {
 
     public void listPeopleInProject(){
         for(int i = 0; i < people.size(); i++){
-            System.out.println(i + '.' + people.get(i).name);
+            System.out.println(i + ". " + people.get(i).getName());
         }
     }
 
@@ -110,14 +115,57 @@ public class Project {
         return tasks.size();
     }
 
+    /**
+     * project cost calculation
+     * @return cost of the project
+     */
     public double projectCost (){
-        return 0.0;
+        double cost = 0.0;
+        for(Person p: people){
+            cost+=p.calcCost();
+        }
+        return cost;
     }
 
     public void finishProject(){ // ainda nao sei o que fazer aqui
 
     }
 
+    public boolean checkPresence(Person person){
+        for(Person p: people){
+            if(p.calcCost()==0 && person.calcCost()==0){
+                Teacher t = (Teacher) p;
+                Teacher tp = (Teacher) person;
+                if(t.getMechaNumber()== tp.getMechaNumber()){
+                    return true;
+                }
+            }
+            else if(p.calcCost()!=0 && person.calcCost()!=0){
+                Scholar s= (Scholar) p;
+                Scholar sp = (Scholar) person;
+                if(s.getIndex()==sp.getIndex()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void addPersonToProject(Person person){
+        people.add(person);
+    }
+
+    public ArrayList<Person> getPeople(){
+        return this.people;
+    }
+
+    public Teacher getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(Teacher principal) {
+        this.principal = principal;
+    }
 
     public String getName() {
         return name;
@@ -151,4 +199,9 @@ public class Project {
         this.duration = duration;
     }
 
+    @Override
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        return "Project." + index + " name:" + name  + "; acronym:" + acronym + "; startDate: " + startDate + "; duration=" + duration;
+    }
 }
