@@ -50,53 +50,43 @@ public class Project implements Serializable {
         tasks.add(task);
     }
 
-    public void listTasks() {
+    public ArrayList<Task> listTasks() {
+        ArrayList<Task> listTask = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
-            System.out.println(i + '.' + tasks.get(i).getName());
+            listTask.add(tasks.get(i));
         }
+        return listTask;
     }
 
-    public void deleteTask(int index){
-        tasks.remove(index);
-    }
-
-    public int taskConclusionState(int index){
-        System.out.println("This task is " + tasks.get(index).getConclusionState() + "% complete");
-        return tasks.get(index).getConclusionState();
-    }
-
-    public void listNonInitialized(){
-        System.out.println("Non initialized tasks:");
-        int j = 1;
+    public ArrayList<Task> listNonInitialized(){
+        ArrayList<Task> nonInitializedTasks = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
-            if(taskConclusionState(i) == 0){
-                System.out.println(j + '.' + tasks.get(i).getName());
-                j++;
+            if(tasks.get(i).getConclusionState() == 0){
+                nonInitializedTasks.add(tasks.get(i));
             }
         }
+        return nonInitializedTasks;
     }
 
-    public void listOutOfDateTasks(){
-        System.out.println("Out of date tasks:");
-        int j = 1;
+    public ArrayList<Task> listOutOfDateTasks(){
+        ArrayList<Task> outOfDateTasks = new ArrayList<>();
         Date currentDate = new Date();
         for(int i = 0; i < tasks.size(); i++){
             if(currentDate.after(tasks.get(i).getEndDate())){
-                System.out.println(j + '.' + tasks.get(i).getName());
-                j++;
+                outOfDateTasks.add(tasks.get(i));
             }
         }
+        return outOfDateTasks;
     }
 
-    public void listCompleteTasks(){
-        System.out.println("Completed tasks:");
-        int j = 1;
+    public ArrayList<Task> listCompleteTasks(){
+        ArrayList<Task> completeTasks = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
-            if(taskConclusionState(i) == 100){
-                System.out.println(j + '.' + tasks.get(i).getName());
-                j++;
+            if(tasks.get(i).getConclusionState() == 100){
+                completeTasks.add(tasks.get(i));
             }
         }
+        return completeTasks;
     }
 
     public int getIndex() {
@@ -131,6 +121,11 @@ public class Project implements Serializable {
 
     }
 
+    /**
+     * check if a person belong to the project
+     * @param person person
+     * @return true if belong or false if not
+     */
     public boolean checkPresence(Person person){
         for(Person p: people){
             if(p.calcCost()==0 && person.calcCost()==0){
@@ -152,7 +147,9 @@ public class Project implements Serializable {
     }
 
     public void addPersonToProject(Person person){
-        people.add(person);
+        if (person.addProjectToPerson(this)){
+            people.add(person);
+        }
     }
 
     public ArrayList<Person> getPeople(){
@@ -202,6 +199,6 @@ public class Project implements Serializable {
     @Override
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        return "Project." + index + " name:" + name  + "; acronym:" + acronym + "; startDate: " + startDate + "; duration=" + duration;
+        return "Project." + index + " name: " + name  + "; acronym: " + acronym + "; startDate: " + startDate + "; duration: " + duration + " dias";
     }
 }

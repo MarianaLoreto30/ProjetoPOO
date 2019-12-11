@@ -1,6 +1,7 @@
 package Projeto;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public abstract class Scholar extends Person {
@@ -27,7 +28,7 @@ public abstract class Scholar extends Person {
      * @param project
      */
     public boolean addProjectToPerson(Project project){
-        if(getProjects().size() < 1 ){
+        if(getProjects().size() < 1){
             getProjects().add(project);
             return true;
         }

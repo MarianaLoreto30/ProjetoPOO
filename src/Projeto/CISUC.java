@@ -17,18 +17,29 @@ public class CISUC implements Serializable{
     private GraphicalUserInterface gui;
 
     public CISUC(){
+        /*if(){
+
+        }*/
         readFilePeople();
         readFileProjects();
-        writeObjectsFile();
+        //readObjectFile();
+        //writeObjectsFile();
 
-        /*for(Project p: projects){
-            System.out.println(p.toString());
-            listPeopleInProject(p);
+        //listAllPeople();
+
+        /*System.out.println("\n------------");
+        for(Project p: projects){
+            System.out.println("\n" + p.toString());
+            //listPeopleInProject(p);
+            listTasks(p);
         }*/
 
-        /*for(Person p: people){
-            listAllAssociates(p);
-        }*/
+        System.out.println("\n------------\n");
+        for(Person p: people){
+            System.out.println("\n" + p.toString());
+            //listAllAssociates(p);
+            listPersonTasks(p);
+        }
 
         /*
         gui = new GraphicalUserInterface(this);
@@ -195,7 +206,7 @@ public class CISUC implements Serializable{
                                safe=true;
                            }
                            for (Project p: projects){
-                               if( p.getIndex() != indexP && indexP !=0/*|| aux[2].equalsIgnoreCase(p.getName())*/){
+                               if( p.getIndex() != indexP && indexP !=0){
                                    safe=true;
                                    break;
                                }
@@ -220,12 +231,10 @@ public class CISUC implements Serializable{
                                            if(personAux.calcCost()==0){
                                                Teacher t = (Teacher) personAux;
                                                if(indexPerson == t.getMechaNumber()){
-                                                   addProjectToPerson(personAux, project);
                                                    addPersonToProject(personAux, project);
                                                }
                                                else if(indexR == t.getMechaNumber()){
                                                    if(!project.getPeople().contains(t)){
-                                                       addProjectToPerson(personAux, project);
                                                        addPersonToProject(personAux, project);
                                                    }
                                                    project.setPrincipal(t);
@@ -234,7 +243,6 @@ public class CISUC implements Serializable{
                                            else{
                                                Scholar s =(Scholar) personAux;
                                                if(indexPerson == s.getIndex()){
-                                                   addProjectToPerson(personAux, project);
                                                    addPersonToProject(personAux, project);
                                                }
                                            }
@@ -304,19 +312,16 @@ public class CISUC implements Serializable{
                                            task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
                                            p.addTask(task);
                                            personAux.addTaskToPerson(task);
-                                           task.addPersonToTask(personAux);
                                        }
                                        else if(effortRate == 0.5){ //Design
                                            task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
                                            p.addTask(task);
                                            personAux.addTaskToPerson(task);
-                                           task.addPersonToTask(personAux);
                                        }
                                        else if(effortRate == 1.00){ //Design
                                            task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
                                            p.addTask(task);
                                            personAux.addTaskToPerson(task);
-                                           task.addPersonToTask(personAux);
                                        }
                                    }
                                }
@@ -339,7 +344,9 @@ public class CISUC implements Serializable{
 
     }
 
-
+    /**
+     * write back in object's files all data
+     */
     public void writeObjectsFile(){
         File fproject = new File("Project.obj");
         File fperson = new File("Person.obj");
@@ -376,6 +383,70 @@ public class CISUC implements Serializable{
 
 
     }
+
+    /**
+     * read from the object's files (if it doesn't exist will read from the normal files)
+     */
+    public void readObjectFile(){
+
+        File fproject = new File("Project.obj");
+        File fperson = new File("Person.obj");
+        projects = new ArrayList<>();
+        Project project;
+        people = new ArrayList<>();
+        Person person;
+
+        if(fproject.exists() && fproject.isFile()){
+            try {
+                FileInputStream fis = new FileInputStream(fproject);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                while(true){
+                    project = (Project) ois.readObject();
+
+                    if(project != null)
+                        projects.add(project);
+                    else
+                        break;
+                }
+
+                ois.close();
+
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error opening the project's file");
+            } catch (IOException ex) {
+                System.out.println("Error reading the project's file");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error converting the object");
+            }
+        }
+
+        if(fperson.exists() && fperson.isFile()){
+            try {
+                FileInputStream fis = new FileInputStream(fperson);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                while(true){
+                    person = (Person) ois.readObject();
+
+                    if(person != null)
+                        people.add(person);
+                    else
+                        break;
+                }
+
+                ois.close();
+
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error opening the people's file");
+            } catch (IOException ex) {
+                System.out.println("Error reading the people's file");
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error converting the object");
+            }
+        }
+    }
+
 
     public void addProject(int index, String name, String acronym, Date startDate, int duration){
         projects.add(new Project(index, name, acronym, startDate, duration));
@@ -428,29 +499,19 @@ public class CISUC implements Serializable{
     }
 
     public void listTasks(Project project){
-        project.listTasks();
-    }
-
-    public void deleteTask(Project project, int index){
-        if (index > project.getTasksLen()){
-            System.out.println("Invalid number!\n");
-        }
-        else {
-            project.deleteTask(index);
+        for(Task t: project.listTasks()){
+            System.out.println(t);
         }
     }
 
-    public void taskConclusionState(Project project, int index){
-        if (index > project.getTasksLen()){
-            System.out.println("Invalid number!\n");
-        }
-        else {
-            project.taskConclusionState(index);
-        }
+    public void taskConclusionState(Task task){
+        System.out.println("Conclusion state: " + task.getConclusionState());
     }
 
     public void listNonInitialized(Project project){
-        project.listNonInitialized();
+        for(Task t: project.listNonInitialized()){
+            System.out.println(t.getIndex() + ". " + t.getName());
+        }
     }
 
     public Project createProject(){
@@ -506,7 +567,11 @@ public class CISUC implements Serializable{
         }
     }
 
-    public void listPersonTasks(){}
+    public void listPersonTasks(Person person){
+        for(int i=0; i<person.getTasksLen(); i++){
+            System.out.println(person.getTask(i));
+        }
+    }
 
     public void listPersonProjects(){}
 
@@ -538,10 +603,6 @@ public class CISUC implements Serializable{
         else {
             person.deleteTaskFromPerson(index);
         }
-    }
-
-    public void personAssociation(Person person, Project proj){
-        //proj.
     }
 
     public boolean projectState(Project proj){

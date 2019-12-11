@@ -15,7 +15,8 @@ public abstract class Task implements Serializable {
     private int index;
 
     public Task(){
-
+        name="Unknown";
+        conclusionState=0;
     }
 
     public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,double effortRate, int index) {
@@ -29,8 +30,7 @@ public abstract class Task implements Serializable {
         this.index=index;
     }
 
-
-    abstract boolean checkOverload();
+    //abstract boolean checkOverload();
 
     public void addPersonToTask(Person person) {
         setResponsible(person);
@@ -102,6 +102,11 @@ public abstract class Task implements Serializable {
         this.effortRate = effortRate;
     }
 
+    @Override
+    public String toString() {
+        return "Task." + index + " - " + effortRate + " name: " + name + ", responsible: " + responsible.getName() + ", startDate:" + startDate+ ", endDate: " + endDate +
+                ", duration: " + duration + ", conclusionState: " + conclusionState + '%';
+    }
 }
 
 

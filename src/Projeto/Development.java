@@ -11,7 +11,7 @@ public class Development extends  Task {
         super(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index);
     }
 
-    public boolean checkOverload(){
+    /*public boolean checkOverload(){
         return false;
-    }
+    }*/
 }

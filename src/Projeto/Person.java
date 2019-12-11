@@ -34,12 +34,13 @@ public abstract class Person implements Serializable {
     }
 
     /**
-     * add task to a person
+     * add task to a person (and vice-versa)
      * @param task task
      */
     public void addTaskToPerson(Task task){
         if(checkOverload(task)==true){
             tasks.add(task);
+            task.addPersonToTask(this);
         }
     }
 
@@ -55,7 +56,9 @@ public abstract class Person implements Serializable {
     public boolean checkOverload(Task task) {
         int load = 0;
         for (int i = 0; i < tasks.size(); i++) {
-            load += tasks.get(i).getEffortRate();
+            if(tasks.get(i).getConclusionState()!=100){
+                load += tasks.get(i).getEffortRate();
+            }
         }
         if (load + task.getEffortRate() <= 1) {
             return true;
