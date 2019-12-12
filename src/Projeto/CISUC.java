@@ -1,6 +1,7 @@
 package Projeto;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,12 +18,9 @@ public class CISUC implements Serializable{
     private GraphicalUserInterface gui;
 
     public CISUC(){
-        /*if(){
-
-        }*/
-        readFilePeople();
-        readFileProjects();
-        //readObjectFile();
+        //readFilePeople();
+        //readFileProjects();
+        readObjectFile();
         //writeObjectsFile();
 
         //listAllPeople();
@@ -32,18 +30,18 @@ public class CISUC implements Serializable{
             System.out.println("\n" + p.toString());
             //listPeopleInProject(p);
             listTasks(p);
-        }*/
+        }
 
         System.out.println("\n------------\n");
         for(Person p: people){
             System.out.println("\n" + p.toString());
             //listAllAssociates(p);
             listPersonTasks(p);
-        }
+        }*/
 
-        /*
         gui = new GraphicalUserInterface(this);
-        gui.setVisible(true);*/
+        gui.registerAndLogin.setVisible(true);
+        
     }
 
     /**
@@ -82,7 +80,7 @@ public class CISUC implements Serializable{
                                     }
                                 }
 
-                                person = new Teacher(aux[2], aux[3], mechaNumber, aux[6]);
+                                person = new Teacher(aux[2], aux[3], mechaNumber, aux[5]);
                                 if(!people.contains(person)){
                                     people.add(person);
                                 }
@@ -180,8 +178,8 @@ public class CISUC implements Serializable{
         String[] aux, peopleProject;
        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
        Date date1, date2;
-       int duration = 0, indexP = 0, indexT=0, indexPerson, indexR, conclusionState = 0;
-       double effortRate = 0.0 ;
+       int duration, indexP = 0, indexT, indexPerson, indexR, conclusionState;
+       double effortRate;
        boolean safe;
        projects=new ArrayList<>();
 
@@ -193,35 +191,32 @@ public class CISUC implements Serializable{
                BufferedReader br = new BufferedReader(fr);
 
                while((line = br.readLine()) != null) {
-                   date1 = new Date();
-                   date2 = new Date();
 
                    aux = line.split(";");
-                   safe=false;
-                   if(aux[0].equalsIgnoreCase("PROJECT") && aux.length == 8){
+                   safe=true;
+                   if(aux[0].equalsIgnoreCase("PROJECT") && aux.length == 9){
 
                        try {
                            indexP=Integer.parseInt(aux[1]);
-                           if(projects.isEmpty()){
-                               safe=true;
-                           }
                            for (Project p: projects){
-                               if( p.getIndex() != indexP && indexP !=0){
+                               if( p.getIndex() == indexP && indexP !=0){
                                    safe=true;
-                                   break;
                                }
                            }
                        } catch (NumberFormatException e){
                            System.out.println("Error in conversion project's index: " + e.getMessage());
+                           e.printStackTrace();
                        }
 
                        if(safe){
                            try {
                                date1 = format.parse(aux[4]);
+                               date2 = format.parse(aux[8]);
                                duration = Integer.parseInt(aux[5]);
                                indexR = Integer.parseInt(aux[7]);
 
                                project = new Project(indexP, aux[2],aux[3], date1, duration);
+                               project.setEndDate(date2);
 
                                peopleProject = aux[6].split(",");
                                for (int i = 0; i < peopleProject.length; i++) {
@@ -263,6 +258,7 @@ public class CISUC implements Serializable{
 
                                    }catch (NumberFormatException e){
                                        System.out.println("Error in conversion person's index: " + e.getMessage());
+                                       e.printStackTrace();
                                    }
                                }
                                projects.add(project);
@@ -270,10 +266,13 @@ public class CISUC implements Serializable{
                            } catch (ParseException e) {
                                e.printStackTrace();
                                System.out.println("Error in date: " + e.getMessage());
+                               e.printStackTrace();
                            } catch (NumberFormatException e){
                                System.out.println("Error in conversion: " + e.getMessage());
+                               e.printStackTrace();
                            } catch (NullPointerException e ){
                                System.out.println("Error in adding to the ArrayList: " + e.getMessage());
+                               e.printStackTrace();
                            }
                        }
                    }
@@ -301,33 +300,37 @@ public class CISUC implements Serializable{
                                            conclusionState= Integer.parseInt(aux[7]);
                                            effortRate=Double.parseDouble(aux[8]);
                                            indexT=Integer.parseInt(aux[9]);
+
+                                           if(effortRate == 0.25){ //Documentation
+                                               task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, indexT);
+                                               p.addTask(task);
+                                               personAux.addTaskToPerson(task);
+                                           }
+                                           else if(effortRate == 0.5){ //Design
+                                               task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, indexT);
+                                               p.addTask(task);
+                                               personAux.addTaskToPerson(task);
+                                           }
+                                           else if(effortRate == 1.00){ //Design
+                                               task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, indexT);
+                                               p.addTask(task);
+                                               personAux.addTaskToPerson(task);
+                                           }
+
                                        } catch (NumberFormatException e) {
-                                           System.out.println("Erro in conversion " + e.getMessage());
+                                           System.out.println("Error in conversion " + e.getMessage());
+                                           e.printStackTrace();
                                        } catch (ParseException e) {
                                            e.printStackTrace();
                                            System.out.println("Error in date: " + e.getMessage());
-                                       }
-
-                                       if(effortRate == 0.25){ //Documentation
-                                           task = new Documentation(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
-                                           p.addTask(task);
-                                           personAux.addTaskToPerson(task);
-                                       }
-                                       else if(effortRate == 0.5){ //Design
-                                           task = new Design(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
-                                           p.addTask(task);
-                                           personAux.addTaskToPerson(task);
-                                       }
-                                       else if(effortRate == 1.00){ //Design
-                                           task = new Development(aux[3], date1, date2, duration, conclusionState, personAux, effortRate, indexT);
-                                           p.addTask(task);
-                                           personAux.addTaskToPerson(task);
+                                           e.printStackTrace();
                                        }
                                    }
                                }
                            }
                        } catch (NumberFormatException e) {
                            System.out.println("Error in conversion:  "+ e.getMessage());
+                           e.printStackTrace();
                        }
 
                    }
@@ -354,31 +357,37 @@ public class CISUC implements Serializable{
         try {
             FileOutputStream fos = new FileOutputStream(fproject);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            for(Project p: projects){
-                oos.writeObject(p);
-            }
+
+            oos.writeObject(projects);
+
             oos.close();
+            fos.close();
         }
         catch (FileNotFoundException e) {
             System.out.println("Error creating project's file: " + e.getMessage());
+            e.printStackTrace();
         }
         catch (IOException e) {
             System.out.println("Error writing in project's file:" + e.getMessage());
+            e.printStackTrace();
         }
 
         try {
             FileOutputStream fos = new FileOutputStream(fperson);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            for(Person p: people){
-                oos.writeObject(p);
-            }
+
+            oos.writeObject(people);
+
             oos.close();
+            fos.close();
         }
         catch (FileNotFoundException e) {
             System.out.println("Error creating person's file: " + e.getMessage());
+            e.printStackTrace();
         }
         catch (IOException e) {
             System.out.println("Error writing in person's file:" + e.getMessage());
+            e.printStackTrace();
         }
 
 
@@ -389,62 +398,58 @@ public class CISUC implements Serializable{
      */
     public void readObjectFile(){
 
-        File fproject = new File("Project.obj");
-        File fperson = new File("Person.obj");
-        projects = new ArrayList<>();
-        Project project;
-        people = new ArrayList<>();
-        Person person;
+        File fProject = new File("Project.obj");
+        File fPerson = new File("Person.obj");
 
-        if(fproject.exists() && fproject.isFile()){
+        if(fPerson.exists() && fPerson.isFile()){
             try {
-                FileInputStream fis = new FileInputStream(fproject);
+                FileInputStream fis = new FileInputStream(fPerson);
                 ObjectInputStream ois = new ObjectInputStream(fis);
 
-                while(true){
-                    project = (Project) ois.readObject();
-
-                    if(project != null)
-                        projects.add(project);
-                    else
-                        break;
-                }
+                people = (ArrayList<Person>) ois.readObject();
 
                 ois.close();
-
-            } catch (FileNotFoundException ex) {
-                System.out.println("Error opening the project's file");
-            } catch (IOException ex) {
-                System.out.println("Error reading the project's file");
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Error converting the object");
-            }
-        }
-
-        if(fperson.exists() && fperson.isFile()){
-            try {
-                FileInputStream fis = new FileInputStream(fperson);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-
-                while(true){
-                    person = (Person) ois.readObject();
-
-                    if(person != null)
-                        people.add(person);
-                    else
-                        break;
-                }
-
-                ois.close();
-
+                fis.close();
             } catch (FileNotFoundException ex) {
                 System.out.println("Error opening the people's file");
+                ex.printStackTrace();
             } catch (IOException ex) {
                 System.out.println("Error reading the people's file");
-            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }catch (ClassNotFoundException ex) {
                 System.out.println("Error converting the object");
+                ex.printStackTrace();
             }
         }
+        else{
+            readFilePeople();
+        }
+
+        if(fProject.exists() && fProject.isFile()){
+            try {
+                FileInputStream fis = new FileInputStream(fProject);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                projects = (ArrayList<Project>) ois.readObject();
+
+                ois.close();
+                fis.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("Error opening the project's file");
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                System.out.println("Error reading the project's file");
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error converting the object");
+                ex.printStackTrace();
+            }
+        }
+        else{
+            readFileProjects();
+        }
+
+        writeObjectsFile();
     }
 
 
@@ -456,10 +461,6 @@ public class CISUC implements Serializable{
         for(int i = 0; i < projects.size(); i++){
             System.out.println(projects.get(i).getIndex() + ". " + projects.get(i).getName());
         }
-    }
-
-    public void listProjectFeatures(Project project, int index){
-        project.listProjectFeatures(index);
     }
 
     public void listPeopleInProject(Project project){
@@ -487,13 +488,13 @@ public class CISUC implements Serializable{
         }
         if (a) {
             if (effortRate == 0.5) {
-                project.addTask(new Design(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index));
+                project.addTask(new Design(name, startDate, endDate, duration, conclusionState, responsible, index));
             }
             else if (effortRate == 0.25) {
-                project.addTask(new Documentation(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index));
+                project.addTask(new Documentation(name, startDate, endDate, duration, conclusionState, responsible, index));
             }
             else if (effortRate == 1) {
-                project.addTask(new Development(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index));
+                project.addTask(new Development(name, startDate, endDate, duration, conclusionState, responsible, index));
             }
         }
     }
@@ -514,8 +515,14 @@ public class CISUC implements Serializable{
         }
     }
 
-    public Project createProject(){
+    public Project createProject(){//read from here?
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Project proj = new Project();
+        try {
+            proj.setEndDate(format.parse("00/00/0000"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return proj;
     }
 
@@ -596,13 +603,8 @@ public class CISUC implements Serializable{
         person.addTaskToPerson(task);
     }
 
-    public void deleteTaskFromPerson(Person person, int index){
-        if (index > person.getTasksLen()){
-            System.out.println("Invalid number!\n");
-        }
-        else {
-            person.deleteTaskFromPerson(index);
-        }
+    public void deleteTaskFromPerson(Person person, Task t){
+        person.deleteTaskFromPerson(t);
     }
 
     public boolean projectState(Project proj){

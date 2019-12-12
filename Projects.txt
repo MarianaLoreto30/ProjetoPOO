@@ -1,26 +1,26 @@
-IDENTIFICADOR;1.indexProjeto;2. name;3. acronimo;4. data de inicio;5. duração;6. Pessoas;7.Docente Principal;
+IDENTIFICADOR;1.indexProjeto;2. name;3. acronimo;4. data de inicio;5. duração;6. Pessoas;7.Docente Principal;8.Data final;
 0TASK;1.indexProjeto;2.Responsavel;3.name;4.start date;5.end date;6.duração;7.estado de conclusão;8.effort rate;9.indexTarefa;
 //
-PROJECT;1;Desenvolvimento de sistemas;DdS;01/06/2019;1000;1,2;123456789;
-TASK;1;1;Criaçao de sistema virtual;02/10/2019;02/10/2019;10;0;0.25;1;
+PROJECT;1;Desenvolvimento de sistemas;DdS;01/06/2019;1000;1,2;123456789;00/00/0000
+TASK;1;1;Criaçao de sistema virtual;02/10/2019;00/00/0000;10;0;0.25;1;
 TASK;1;2;Aplicação de camadas de rede;15/12/2019;01/01/2020;50;100;0.50;2;
-TASK;1;123456789;Conclusões e previsões;28/11/2019;01/01/2020;100;0;0.25;3;
+TASK;1;123456789;Conclusões e previsões;28/11/2019;01/01/2020;100;100;0.25;3;
 //
-PROJECT;2;ProjetoPoo;PPOO;07/08/2019;250;123456789,3,023456789,4;023456780;
-TASK;2;023456780;Ler ficheiros de texto;02/10/2019;02/10/2019;10;0;1;1;
-TASK;2;2;Interação com o utilizador;28/11/2019;01/01/2020;20;50;0.50;2;
-TASK;2;3;Interface gráfica;28/11/2019;01/01/2020;20;0;0.50;3;
+PROJECT;2;ProjetoPoo;PPOO;07/08/2019;250;123456789,3,023456789,4;023456780;00/00/0000
+TASK;2;023456780;Ler ficheiros de texto;02/10/2019;00/00/0000;10;0;1;1;
+TASK;2;2;Interação com o utilizador;28/11/2019;00/00/0000;20;50;0.50;2;
+TASK;2;3;Interface gráfica;28/11/2019;00/00/0000;20;0;0.50;3;
 //
-PROJECT;3;Desenvolvimento de sistemas;DdS;01/06/2019;500;4,5,6,123456787;123456788;
-TASK;3;4;Criação de sistema virtual;02/10/2019;01/01/2020;10;0;1;1;
-TASK;3;5;Gestão de processos;28/11/2019;01/01/2020;100;1;0.50;2;
-TASK;3;123456788;Conclusões e previsões;28/11/2019;01/01/2020;100;0;0.25;3;
+PROJECT;3;Desenvolvimento de sistemas;DdS;01/06/2019;500;4,5,6,123456787;123456788;00/00/0000
+TASK;3;4;Criação de sistema virtual;02/10/2019;00/00/0000;10;0;1;1;
+TASK;3;5;Gestão de processos;28/11/2019;00/00/0000;100;10;0.50;2;
+TASK;3;123456788;Conclusões e previsões;28/11/2019;01/01/2020;40;100;0.25;3;
 //
-PROJECT;4;Redes & Internet;R&I;01/06/2019;1500;7,8,123456788;123456787;
-TASK;4;7;Estado da rede;11/11/2019;01/01/2020;10;0;0.25;1;
-TASK;4;8;Aplicação de camadas de rede;28/11/2019;01/01/2020;100;1;0.50;2;
-TASK;4;123456787;Redação da conclusão do primeiro estágio;28/11/2019;01/01/2020;100;0;0.25;3;
+PROJECT;4;Redes & Internet;R&I;01/06/2019;1500;7,8,123456788;123456787;00/00/0000
+TASK;4;7;Estado da rede;11/11/2019;00/00/0000;10;0;0.25;1;
+TASK;4;8;Aplicação de camadas de rede;28/11/2019;00/00/0000;100;80;0.50;2;
+TASK;4;123456787;Redação da conclusão do primeiro estágio;28/11/2019;00/00/0000;100;0;0.25;3;00/00/0000
 //
-PROJECT;5;Automatos discretos: vantagens?;ADV;01/06/2019;1500;9;123456700;
-TASK;5;9;Categorizar os vários automatos;11/11/2019;01/01/2020;10;0;0.25;1;
+PROJECT;5;Automatos discretos: vantagens?;ADV;01/06/2019;1500;9;123456700;00/00/0000
+TASK;5;9;Categorizar os vários automatos;11/11/2019;00/00/0000;10;0;0.25;1;
 TASK;5;123456700;Descrição aprofundada de automatos discretos;28/11/2019;01/01/2020;100;1;0.25;2;

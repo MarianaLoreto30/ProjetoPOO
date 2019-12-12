@@ -44,8 +44,10 @@ public abstract class Person implements Serializable {
         }
     }
 
-    public void deleteTaskFromPerson(int index){
-        tasks.remove(index); //Não deviamos apagar!?
+    public void deleteTaskFromPerson(Task t){
+        if(tasks.contains(t)){
+            tasks.remove(t);
+        }
     }
 
     /**
@@ -57,10 +59,10 @@ public abstract class Person implements Serializable {
         int load = 0;
         for (int i = 0; i < tasks.size(); i++) {
             if(tasks.get(i).getConclusionState()!=100){
-                load += tasks.get(i).getEffortRate();
+                load += tasks.get(i).returnEffortRate();
             }
         }
-        if (load + task.getEffortRate() <= 1) {
+        if (load + task.returnEffortRate() <= 1) {
             return true;
         } else {
             return false;
@@ -77,6 +79,10 @@ public abstract class Person implements Serializable {
 
     public Task getTask(int index){
         return tasks.get(index);
+    }
+
+    public ArrayList<Task> getTasks(){
+        return tasks;
     }
 
     public int getTasksLen(){

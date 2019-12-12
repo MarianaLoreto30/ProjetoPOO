@@ -17,6 +17,7 @@ public class Project implements Serializable {
     private ArrayList<Task> tasks;
     private ArrayList<Person> people;
     private Teacher principal;
+    private Date endDate;
 
     public Project(){
         name ="Unknown";
@@ -36,20 +37,39 @@ public class Project implements Serializable {
         people = new  ArrayList<>();
     }
 
-    public void listProjectFeatures(int index){
-        System.out.println("-Name: " + getName() + '\n' + "-Acronym: " + getAcronym() + '\n' + "-Start date: " + getStartDate() + '\n' + "-Duration: " + getDuration());
-    }
-
-    public void listPeopleInProject(){
+    /**
+     * all people associate at the project
+     * @return ArrayList of people
+     */
+    public ArrayList<Person> listPeopleInProject(){
+        ArrayList<Person> listPerson = new ArrayList<>();
         for(int i = 0; i < people.size(); i++){
-            System.out.println(i + ". " + people.get(i).getName());
+            listPerson.add(people.get(i));
         }
+        return listPerson;
     }
 
     public void addTask(Task task) {
         tasks.add(task);
     }
 
+    /**
+     * delete task from project (and from the person responsible)
+     * @param index
+     */
+    public void deleteTask(int index){
+        for(Task t: tasks){
+            if(t.getIndex()==index){
+                tasks.remove(t);
+                t.getResponsible().deleteTaskFromPerson(t);
+            }
+        }
+    }
+
+    /**
+     * all tasks of the project
+     * @return ArrayList of all project's tasks
+     */
     public ArrayList<Task> listTasks() {
         ArrayList<Task> listTask = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
@@ -58,6 +78,10 @@ public class Project implements Serializable {
         return listTask;
     }
 
+    /**
+     * list all tasks non initialized (conclusion state equals 0)
+     * @return ArrayList of tasks
+     */
     public ArrayList<Task> listNonInitialized(){
         ArrayList<Task> nonInitializedTasks = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
@@ -68,6 +92,10 @@ public class Project implements Serializable {
         return nonInitializedTasks;
     }
 
+    /**
+     *list all tasks that doesn't finish in time
+     * @return ArrayList of tasks
+     */
     public ArrayList<Task> listOutOfDateTasks(){
         ArrayList<Task> outOfDateTasks = new ArrayList<>();
         Date currentDate = new Date();
@@ -79,6 +107,10 @@ public class Project implements Serializable {
         return outOfDateTasks;
     }
 
+    /**
+     * list all complete tasks (conclusion state equals 100)
+     * @return ArrayList of tasks
+     */
     public ArrayList<Task> listCompleteTasks(){
         ArrayList<Task> completeTasks = new ArrayList<>();
         for(int i = 0; i < tasks.size(); i++){
@@ -110,9 +142,23 @@ public class Project implements Serializable {
      * @return cost of the project
      */
     public double projectCost (){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         double cost = 0.0;
+        Date currentDate = new Date();
+        Date aux;
         for(Person p: people){
-            cost+=p.calcCost();
+
+            try {
+                if(getEndDate().compareTo(format.parse("00/00/0000")) == 1){
+
+                }
+            } catch (ParseException e) {
+                System.out.println("");
+            }
+            if(p.calcCost()!=0){
+                Scholar s = (Scholar) p;
+                //Fazer contasssssssssssssssssssssss
+            }
         }
         return cost;
     }
@@ -146,12 +192,20 @@ public class Project implements Serializable {
         return false;
     }
 
+    /**
+     * add a person to the project (and vice-versa)
+     * @param person that we want to add
+     */
     public void addPersonToProject(Person person){
         if (person.addProjectToPerson(this)){
             people.add(person);
         }
     }
 
+    /**
+     * return all people that belong to the project
+     * @return ArrayList of people that belong to the project
+     */
     public ArrayList<Person> getPeople(){
         return this.people;
     }
@@ -194,6 +248,14 @@ public class Project implements Serializable {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override

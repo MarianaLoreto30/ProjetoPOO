@@ -7,11 +7,16 @@ public class Development extends  Task {
 
     }
 
-    public Development(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate, int index) {
-        super(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index);
+    public Development(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,  int index) {
+        super(name, startDate, endDate, duration, conclusionState, responsible, index);
     }
 
-    /*public boolean checkOverload(){
-        return false;
-    }*/
+    public double returnEffortRate(){
+        return 1.00;
+    }
+
+    @Override
+    public String toString() {
+        return "Development." + super.toString();
+    }
 }

@@ -1,5 +1,6 @@
 package Projeto;
 
+/*
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,7 +63,7 @@ public class GraphicalUserInterface extends JFrame{
             public void actionPerformed(ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
             }
-        });*/
+        });
 
 
         jPanel = new JPanel(null);
@@ -70,7 +71,7 @@ public class GraphicalUserInterface extends JFrame{
         //jPanel.add(jButtonSelected);
 
         this.add(jPanel);
-    }/*
+    }
 
     private void jListSelectionListener(ListSelectionEvent evt) {
        String str = jList.getSelectedValue().toString();
@@ -96,7 +97,7 @@ public class GraphicalUserInterface extends JFrame{
         System.out.println("SELECTED: "+str+"!!!");
 
         JOptionPane.showMessageDialog(null, "Selected person '"+str+"'", "Janela de mensagem!", JOptionPane.PLAIN_MESSAGE);
-    }*/
+    }
 
     private void createList() {
         listValues = new DefaultListModel();
@@ -104,68 +105,36 @@ public class GraphicalUserInterface extends JFrame{
         listValues.addElement("Item 2");
         listValues.addElement("Item 3");
 
-    }
-
+    }*/
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
-    public class interfacegrafica extends JFrame{
 
-        public interfacegrafica() {
+public class GraphicalUserInterface{
 
+    public CISUC cisuc;
+    //VARIABLES
+    private int width;
+    private int height;
+    public JFrame registerAndLogin;
+    //public JFrame login;
+    //public JFrame register;
+    //PRIMEIRO PAIPEL
 
-            /////////////////////reguster and login////////////////////////////
+    public GraphicalUserInterface(CISUC cisuc) {
+        this.cisuc = cisuc;
+        this.width = 400;
+        this.height = 300;
 
-/*        setTitle("Painel e componentes");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel label = new JLabel("Welcome!");
-        label.setBounds(150, 90, 100, 25);
-        JButton registar = new JButton("Registar");
-        registar.setBounds(70, 150, 100, 20);
-        JButton login = new JButton("Login");
-        login.setBounds(180, 150, 100, 20);
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.add(label);
-        panel.add(registar);
-        panel.add(login);
-        add(panel);
-        setVisible(true);*//*
+        registerAndLogin=registerAndLogin();
+        //login = login();
+        //register = register();
 
 
-
-        /////////////////////register or login////////////////////////////
-
-      */
-/*      JFrame frame = new JFrame();
-        frame.setSize(400, 300);
-        JLabel email = new JLabel("E-mail");
-        email.setBounds(50, 50, 100, 25);
-        JTextField emailText = new JTextField(10);
-        emailText.setBounds(50, 75, 200, 25);
-        JLabel name = new JLabel("Name");
-        name.setBounds(50, 100, 100, 25);
-        JTextField nameText = new JTextField(10);
-        nameText.setBounds(50, 125, 200, 25);
-        JButton button = new JButton("Register"); // "Login"
-        button.setBounds(50, 160, 100, 25);
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.add(email);
-        panel.add(emailText);
-        panel.add(name);
-        panel.add(nameText);
-        panel.add(button);
-        frame.add(panel);
-        frame.setVisible(true);*//*
-
-
-        /////////////////////////////Pagina Inicial//////////////////////////////////
-
-*/
-/*        setTitle("CISUC");
+    /*   setTitle("CISUC");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JLabel label = new JLabel("CISUC");
@@ -183,54 +152,199 @@ import java.util.*;
         setVisible(true);*/
 
 
-/////////////////////////////////PROJETOS/////////////////////////////////
 
-            JList list;
-            JLabel labelSelectedValue;
-            JFrame frame = new JFrame();
-            frame.setTitle("JList");
-            frame.setSize(400, 300);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JLabel label = new JLabel("Lista de valores (selecionar 1 ou mais valores)");
-            label.setBounds(50, 10, 300, 25);
-            DefaultListModel listValues = new DefaultListModel();
-            listValues.addElement("Item 1");
-            listValues.addElement("Item 2");
-            listValues.addElement("Item 3");
-            listValues.addElement("Item 4");
-            listValues.addElement("Item 5");
-            listValues.addElement("Item 6");
-            listValues.addElement("Item 7");
-            listValues.addElement("Item 8");
-            listValues.addElement("Item 9");
-            listValues.addElement("Item 10");
-            listValues.addElement("Item 11");
-            listValues.addElement("Item 12");
-            list = new JList(listValues);
-            JScrollPane listScroller = new JScrollPane(list);
-            listScroller.setBounds(50, 35, 300, 150);
-            JButton btnSelected = new JButton("Selecionado ");
-            ButtonListener btnActionListener = new ButtonListener();
-            btnSelected.addActionListener(btnActionListener);
-            btnSelected.setBounds(50, 200, 120, 25);
-            labelSelectedValue = new JLabel("-");
-            labelSelectedValue.setBounds(180, 200, 170, 25);
-            JPanel panel = new JPanel();
-            panel.setLayout(null);
-            panel.add(label);
-            panel.add(listScroller);
-            panel.add(btnSelected);
-            panel.add(labelSelectedValue);
-            frame.add(panel);
-            frame.setVisible(true);
+        /*JList list;
+        JLabel labelSelectedValue;
+        JFrame frame = new JFrame();
+        frame.setTitle("JList");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JLabel label = new JLabel("Lista de valores (selecionar 1 ou mais valores)");
+        label.setBounds(50, 10, 300, 25);
+        DefaultListModel listValues = new DefaultListModel();
+        listValues.addElement("Item 1");
+        listValues.addElement("Item 2");
+        listValues.addElement("Item 3");
+        listValues.addElement("Item 4");
+        listValues.addElement("Item 5");
+        listValues.addElement("Item 6");
+        listValues.addElement("Item 7");
+        listValues.addElement("Item 8");
+        listValues.addElement("Item 9");
+        listValues.addElement("Item 10");
+        listValues.addElement("Item 11");
+        listValues.addElement("Item 12");
+        list = new JList(listValues);
+        JScrollPane listScroller = new JScrollPane(list);
+        listScroller.setBounds(50, 35, 300, 150);
+        JButton btnSelected = new JButton("Selecionado ");
+        ButtonListener btnActionListener = new ButtonListener();
+        btnSelected.addActionListener(btnActionListener);
+        btnSelected.setBounds(50, 200, 120, 25);
+        labelSelectedValue = new JLabel("-");
+        labelSelectedValue.setBounds(180, 200, 170, 25);
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.add(label);
+        panel.add(listScroller);
+        panel.add(btnSelected);
+        panel.add(labelSelectedValue);
+        frame.add(panel);
+        frame.setVisible(true);*/
 
-        }
+    }
 
-        private
+    /**
+     * JPanel for the register or login
+     * @return JPanel for the register or login
+     */
+    public JFrame registerAndLogin(){
 
-        public static void main(String[] args) {
-            new interfacegrafica();
+        JFrame frame = new JFrame();
+        JLabel labelWelcome;
+        JButton register;
+        JButton login;
+        JPanel panelWelcome;
+
+        frame.setTitle("CISUC - investigation center");
+        frame.setSize(width, height);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        labelWelcome = new JLabel("Welcome!");
+        labelWelcome.setBounds(150, 90, 100, 25);
+
+        register = new JButton("Register");
+        register.setBounds(70, 150, 100, 20);
+
+        login = new JButton("Login");
+        login.setBounds(180, 150, 100, 20);
+
+        panelWelcome = new JPanel();
+        panelWelcome.setLayout(null);
+        panelWelcome.add(labelWelcome);
+        panelWelcome.add(register);
+        panelWelcome.add(login);
+
+        frame.add(panelWelcome);
+
+        //actions
+
+        login.addActionListener(new ButtonLogin());
+
+        register.addActionListener(new ButtonRegister());
+
+        return frame;
+    }
+
+    private class ButtonLogin implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            registerAndLogin.setVisible(false);
+            login().setVisible(true);
         }
     }
 
+    private class ButtonRegister implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            registerAndLogin.setVisible(false);
+            register().setVisible(true);
+        }
+    }
+
+    private JFrame login (){
+
+        JFrame frame = new JFrame();
+
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel email = new JLabel("E-mail");
+        email.setBounds(50, 50, 100, 25);
+        JTextField emailText = new JTextField(10);
+        emailText.setBounds(50, 75, 200, 25);
+
+        JLabel name = new JLabel("Name");
+        name.setBounds(50, 100, 100, 25);
+        JTextField nameText = new JTextField(10);
+        nameText.setBounds(50, 125, 200, 25);
+
+        JButton button = new JButton("Login"); //
+        button.setBounds(50, 160, 100, 25);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.add(email);
+        panel.add(emailText);
+        panel.add(name);
+        panel.add(nameText);
+        panel.add(button);
+
+        frame.add(panel);
+
+        return frame;
+    }
+
+    private JFrame register(){
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+
+        int altura = 400;
+        int comprimento = 800;
+
+        frame.setSize(comprimento, altura);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        String[] statute = {"Teacher", "Bachelor", "Master", "Doctor"};
+
+        JComboBox statuteBox = new JComboBox(statute);
+        statuteBox.setBounds(comprimento/4, altura/8, comprimento/2, altura/8 );
+        ComboBoxStatute comboBoxStatute = new ComboBoxStatute();
+
+
+
+        JLabel choose = new JLabel("Choose a statute:");
+        choose.setBounds(comprimento/4, altura/14, comprimento/2, 25);
+
+        panel.setLayout(null);
+        panel.add(statuteBox);
+        panel.add(choose);
+
+        frame.add(panel);
+
+        return frame;
+    }
+
+    private JPanel registerPanels(int statute){
+        JPanel panel = new JPanel();
+
+        if(statute == 1){
+
+        }
+        else if (statute == 2){
+
+        }
+
+        return panel;
+    }
+
+    private class ComboBoxStatute implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JComboBox comboBox = (JComboBox)e.getSource();
+            String statute = (String) comboBox.getSelectedItem();
+
+            if(statute.equalsIgnoreCase("Teacher")){
+                register().add(registerPanels(0));
+            }
+            else if(statute.equalsIgnoreCase("Bachelor")){
+                register().add(registerPanels(1));
+            }
+            else if(statute.equalsIgnoreCase("Master")){
+                register().add(registerPanels(2));
+            }
+            else if(statute.equalsIgnoreCase("Doctor")){
+                register().add(registerPanels(3));
+            }
+        }
+    }
 }

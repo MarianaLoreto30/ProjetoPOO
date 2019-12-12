@@ -7,11 +7,16 @@ public class Design extends Task {
     public Design() {
     }
 
-    public Design(String name,Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate, int index) {
-        super(name, startDate, endDate, duration, conclusionState, responsible, effortRate, index);
+    public Design(String name,Date startDate, Date endDate, int duration, int conclusionState, Person responsible, int index) {
+        super(name, startDate, endDate, duration, conclusionState, responsible, index);
     }
 
-    /*public boolean checkOverload(){
-        return false;
-    }*/
+    public double returnEffortRate(){
+        return 0.50;
+    }
+
+    @Override
+    public String toString() {
+        return "Design." + super.toString();
+    }
 }
