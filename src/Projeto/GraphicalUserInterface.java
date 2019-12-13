@@ -1,112 +1,5 @@
 package Projeto;
 
-/*
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-public class GraphicalUserInterface extends JFrame{
-
-    private JList jList;
-    private JPanel jPanel;
-    public CISUC cisuc;
-    private JButton jButtonSelected;
-    private JButton jButtonAdd;
-    DefaultListModel listValues;
-    private  int height;
-    private int width;
-
-    public GraphicalUserInterface(CISUC cisuc) {
-        this.cisuc = cisuc;
-
-        width=400;
-        height=300;
-
-        this.setTitle("CISUC - investigation Center");
-        this.setSize(width, height);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
-        this.setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        this.setMinimumSize(new Dimension(width/2,height/2));
-
-
-        /*
-        jList = new JList();
-        createList();
-
-        jList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                jListSelectionListener(evt);
-            }
-        });
-
-        JScrollPane jListScroller = new JScrollPane(jList);
-        jListScroller.setBounds(width/8, height/6, 3/4*width, height/3);
-
-        jButtonSelected = new JButton("Selected");
-        jButtonSelected.setBounds(width/8, height/3 + 75, 1/4*width, 25);
-        jButtonSelected.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jButtonSelectedActionPerformed(evt);
-            }
-        });
-
-        jButtonAdd = new JButton("Add person");
-        jButtonAdd.setBounds(width/8+75,height/3 + 75, 1/4*width, 25);
-        jButtonAdd.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jButtonAddActionPerformed(evt);
-            }
-        });
-
-
-        jPanel = new JPanel(null);
-        //jPanel.add(jListScroller);
-        //jPanel.add(jButtonSelected);
-
-        this.add(jPanel);
-    }
-
-    private void jListSelectionListener(ListSelectionEvent evt) {
-       String str = jList.getSelectedValue().toString();
-       System.out.println("SELECTED: "+str+"!!!");
-    }
-
-    private void jButtonAddActionPerformed(ActionEvent evt) {
-        Window1 w = new Window1(this);
-        w.setVisible(true);
-        this.setVisible(false);
-//        String value = JOptionPane.showInputDialog(null, "Introduza o nome", "Input", JOptionPane.QUESTION_MESSAGE);
-//        System.out.println("NOME: "+value);
-//        Person p = new Person((int)(Math.random()*10000), value);
-//        program.addPerson(p);
-//
-////        listValues.addElement(p.getNome());
-//        createList();
-    }
-
-
-    private void jButtonSelectedActionPerformed(ActionEvent evt) {
-        String str = jList.getSelectedValue().toString();
-        System.out.println("SELECTED: "+str+"!!!");
-
-        JOptionPane.showMessageDialog(null, "Selected person '"+str+"'", "Janela de mensagem!", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private void createList() {
-        listValues = new DefaultListModel();
-        listValues.addElement("Item 1");
-        listValues.addElement("Item 2");
-        listValues.addElement("Item 3");
-
-    }*/
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -119,26 +12,28 @@ public class GraphicalUserInterface{
 
     public CISUC cisuc;
     //VARIABLES
-    private int width;
-    private int height;
     private SimpleDateFormat format;
+    private JList list;
+    private  DefaultListModel listValues;
     public JFrame registerAndLogin;
     private JFrame loginFrame;
     private JFrame registerFrame;
     private JFrame cisucPage;
+    private JFrame projectPage;
+    private JFrame personPage;
+    private Person person;
 
 
     public GraphicalUserInterface(CISUC cisuc) {
         this.cisuc = cisuc;
-        this.width = 400;
-        this.height = 300;
         this.format= new SimpleDateFormat("dd/MM/yyyy");
 
         registerAndLogin=registerAndLogin();
         loginFrame = login();
         registerFrame = register();
         cisucPage = cisucPage();
-
+        projectPage = projectPage();
+        personPage = personPage();
 
 
         /*JList list;
@@ -195,7 +90,7 @@ public class GraphicalUserInterface{
         JPanel panelWelcome;
 
         frame.setTitle("CISUC - investigation center");
-        frame.setSize(width, height);
+        frame.setSize(400, 300);
         frame.setDefaultCloseOperation(closeOperartion());
         labelWelcome = new JLabel("Welcome!");
         labelWelcome.setBounds(150, 90, 100, 25);
@@ -242,15 +137,52 @@ public class GraphicalUserInterface{
         JLabel email = new JLabel("E-mail");
         email.setBounds(50, 50, 100, 25);
         JTextField emailText = new JTextField(10);
-        emailText.setBounds(50, 75, 200, 25);
+        emailText.setBounds(50, 75, 250, 25);
 
         JLabel name = new JLabel("Name");
         name.setBounds(50, 100, 100, 25);
         JTextField nameText = new JTextField(10);
-        nameText.setBounds(50, 125, 200, 25);
+        nameText.setBounds(50, 125, 250, 25);
 
         JButton button = new JButton("Login");
         button.setBounds(50, 160, 100, 25);
+
+        JButton goBack = new JButton("Back");
+        goBack.setBounds(200, 160, 100, 25);
+
+        button.addActionListener( new ActionListener() {
+            public void actionPerformed (ActionEvent e) {
+                int flag=0;
+
+                if(nameText.getText().isEmpty() || emailText.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "All fields must be complete", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                }
+                else{
+                    for(Person p: cisuc.people){
+                        if(p.getName().equalsIgnoreCase(nameText.getText()) && p.getEmail().equalsIgnoreCase(emailText.getText())){
+                            frame.setVisible(false);
+                            cisucPage.setVisible(true);
+                            flag = 1;
+                            break;
+                        }
+                        else{
+                            flag =0;
+                        }
+                    }
+                    if(flag == 0){
+                        JOptionPane.showMessageDialog(null, "Incorrect name or email", "Error", JOptionPane.PLAIN_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        goBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.setVisible(false);
+                registerAndLogin.setVisible(true);
+            }
+        });
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -259,6 +191,7 @@ public class GraphicalUserInterface{
         panel.add(name);
         panel.add(nameText);
         panel.add(button);
+        panel.add(goBack);
 
         frame.add(panel);
 
@@ -368,7 +301,7 @@ public class GraphicalUserInterface{
                                     }
                                 }
                             }
-                            cisuc.createTeacher(nameText.getText(), emailText.getText(), number, researchAreaText.getText());
+                            person = cisuc.createTeacher(nameText.getText(), emailText.getText(), number, researchAreaText.getText());
                         }
                     }
                     catch (NumberFormatException ex) {
@@ -434,7 +367,7 @@ public class GraphicalUserInterface{
                                 endDateText.setText(value);
 
                             }
-                            cisuc.createScholar(nameText.getText(), emailText.getText(), date1, date2, statute);
+                            person = cisuc.createScholar(nameText.getText(), emailText.getText(), date1, date2, statute);
                         }
                     }
                     catch (ParseException ex) {
@@ -511,10 +444,134 @@ public class GraphicalUserInterface{
         return  frame;
     }
 
+    private JFrame projectPage(){
+        JFrame frame = new JFrame();
+
+        frame.setResizable(false);
+        frame.setTitle("Projects");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(closeOperartion());
+
+        listValues = new DefaultListModel();
+
+        listValues.addElement("Create project");
+        listValues.addElement("List all projects");
+        listValues.addElement("List finished projects");
+        listValues.addElement("List unfinished projects");
+
+        list = new JList(listValues);
+        JScrollPane listScroller = new JScrollPane(list);
+        listScroller.setBounds(50, 60, 300, 80);
+
+        JButton btnSelected = new JButton("Select");
+        JButton goBack = new JButton("Back");
+
+
+        //ButtonListener btnActionListener = new ButtonListener();
+        //btnSelected.addActionListener(btnActionListener);
+        btnSelected.setBounds(50, 200, 120, 25);
+        goBack.setBounds(100, 200, 120, 25);
+
+
+        goBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                cisucPage().setVisible(true);
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        panel.add(listScroller);
+        panel.add(btnSelected);
+        panel.add(goBack);
+        frame.add(panel);
+
+        return frame;
+    }
+
+    private JFrame personPage(){
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+
+        frame.setResizable(false);
+        frame.setTitle("People");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(closeOperartion());
+
+        DefaultListModel listOption = new DefaultListModel();
+
+        listOption.addElement("List all people");
+        listOption.addElement("List my projects");
+        listOption.addElement("List my tasks");
+
+        JList list = new JList(listOption);
+        JScrollPane listScroller = new JScrollPane(list);
+        listScroller.setBounds(50, 60, 300, 80);
+
+        JButton Selected = new JButton("Select");
+        JButton goBack = new JButton("Back");
+
+        Selected.setBounds(50, 200, 120, 25);
+        goBack.setBounds(100, 200, 120, 25);
+
+        goBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.setVisible(false);
+                cisucPage.setVisible(true);
+            }
+        });
+
+        Selected.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.setVisible(false);
+                personPageAction(list.getSelectedIndex()).setVisible(true);
+            }
+        });
+
+        panel.setLayout(null);
+
+        panel.add(listScroller);
+        panel.add(Selected);
+        panel.add(goBack);
+        frame.add(panel);
+
+        return frame;
+    }
+
+    private JFrame personPageAction(int action){
+        JFrame frame = new JFrame();
+
+        frame.setResizable(false);
+        frame.setTitle("People");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(closeOperartion());
+
+        if(action==1){
+
+        }
+
+
+        return frame;
+    }
+
     private int closeOperartion(){
 
         cisuc.writeObjectsFile();
-        return JFrame.EXIT_ON_CLOSE;
 
+        /*int option = JOptionPane.showConfirmDialog(null, "You sure that you want to leave?", " ", JOptionPane.YES_NO_OPTION);
+
+        if(option == JOptionPane.YES_OPTION){
+            return JFrame.EXIT_ON_CLOSE;
+        }
+        else{
+            return JFrame.DO_NOTHING_ON_CLOSE;
+        }*/
+
+        return JFrame.EXIT_ON_CLOSE;
     }
+
 }

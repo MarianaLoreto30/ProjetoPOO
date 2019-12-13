@@ -7,11 +7,25 @@ public class Bachelor extends Scholar {
 
     private ArrayList<Teacher> adviser;
 
+    /**
+     * bachelor's constructor
+     * @param startDate start date of the scholarship
+     * @param finalDate end date of the scholarship
+     * @param index number that identify the scholar
+     */
     public Bachelor(Date startDate, Date finalDate, int index) {
         super(startDate, finalDate, index);
         this.adviser= new ArrayList<>();
     }
 
+    /**
+     * constructor
+     * @param name person's name
+     * @param eMail person's e-mail
+     * @param startDate start date of the scholarship
+     * @param finalDate end date of the scholarship
+     * @param index number that identify the scholar
+     */
     public Bachelor(String name, String eMail, Date startDate, Date finalDate, int index) {
         super(name, eMail, startDate, finalDate, index);
         this.adviser= new ArrayList<>();

@@ -18,6 +18,16 @@ public abstract class Task implements Serializable {
         conclusionState=0;
     }
 
+    /**
+     * Task's constructor
+     * @param name task's name
+     * @param startDate start date
+     * @param endDate end date
+     * @param duration estimated duration in days
+     * @param conclusionState conclusion state
+     * @param responsible responsible (person)
+     * @param index task's index in the project that belongs
+     */
     public Task(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, int index) {
         this.name = name;
         this.startDate = startDate;
@@ -30,6 +40,10 @@ public abstract class Task implements Serializable {
 
     abstract double returnEffortRate();
 
+    /**
+     * add a responsible to the task
+     * @param person Person
+     */
     public void addPersonToTask(Person person) {
         setResponsible(person);
     }

@@ -11,6 +11,10 @@ public class Development extends  Task {
         super(name, startDate, endDate, duration, conclusionState, responsible, index);
     }
 
+    /**
+     * Development's effort rate
+     * @return double
+     */
     public double returnEffortRate(){
         return 1.00;
     }

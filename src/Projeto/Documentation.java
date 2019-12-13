@@ -5,12 +5,17 @@ import java.util.Date;
 public class Documentation extends Task {
 
     public Documentation() {
+
     }
 
     public Documentation(String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible,  int index) {
         super(name, startDate, endDate, duration, conclusionState, responsible, index);
     }
 
+    /**
+     * Documentation's effort rate
+     * @return double
+     */
     public double returnEffortRate(){
         return 0.25;
     }

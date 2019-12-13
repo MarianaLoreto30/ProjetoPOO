@@ -11,6 +11,10 @@ public class Design extends Task {
         super(name, startDate, endDate, duration, conclusionState, responsible, index);
     }
 
+    /**
+     * Design's effort rate
+     * @return double
+     */
     public double returnEffortRate(){
         return 0.50;
     }

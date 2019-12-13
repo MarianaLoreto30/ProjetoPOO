@@ -44,6 +44,8 @@ public class CISUC implements Serializable{
 
     }
 
+    //FICHEIROS
+
     /**
      * read the people's file and create the object Person adding in the arrayList (this method does not associate people and projects)
      */
@@ -454,8 +456,29 @@ public class CISUC implements Serializable{
         writeObjectsFile();
     }
 
-    public void addProject(String name, String acronym, Date startDate, int duration){
-        projects.add(new Project(projects.size()+1, name, acronym, startDate, duration));
+
+    //PROJETOS
+
+
+    /**
+     * create a new project and add to the ArrayList of projects
+     * @param name name of the project
+     * @param acronym acronym
+     * @param startDate start date of the project
+     * @param duration estimated duration
+     * @return the project created
+     */
+    public Project createProject(String name, String acronym, Date startDate, int duration){
+        int index = projects.size()+1;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Project proj = new Project( index, name, acronym, startDate, duration);
+        try {
+            proj.setEndDate(format.parse("00/00/0000"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        projects.add(proj);
+        return proj;
     }
 
     public void listAllProjects(){
@@ -464,20 +487,16 @@ public class CISUC implements Serializable{
         }
     }
 
-    public void listPeopleInProject(Project project){
-        project.listPeopleInProject();
+    /**
+     * list all people in the project
+     * @param project Project
+     * @return ArrayList with all people in the project
+     */
+    public ArrayList<Person> listPeopleInProject(Project project){
+        return project.listPeopleInProject();
     }
 
-    //NAO DEVEMOS REMOVER PROJETO!!
-    public boolean removeProject(int index){
-        for(Project p: projects){
-            if(index == p.getIndex()){
-                projects.remove(p);
-                return true;
-            }
-        }
-        return false;
-    }
+    //TASKS
 
     public void addTask(Project project, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate){
         boolean a = true;
@@ -501,42 +520,30 @@ public class CISUC implements Serializable{
         }
     }
 
-    public void listTasks(Project project){
-        for(Task t: project.listTasks()){
-            System.out.println(t);
-        }
+    /**
+     * list all task from one project
+     * @param project Project
+     * @return ArrayList of project's tasks
+     */
+    public ArrayList<Task> listTasks(Project project){
+        return project.listTasks();
     }
 
     public void taskConclusionState(Task task){
         System.out.println("Conclusion state: " + task.getConclusionState());
     }
 
-    public void listNonInitialized(Project project){
-        for(Task t: project.listNonInitialized()){
-            System.out.println(t.getIndex() + ". " + t.getName());
-        }
+    /**
+     * list all non initialized tasks in the project
+     * @param project Project
+     * @return ArrayList of tasks non initialized in the project
+     */
+    public ArrayList<Task> listNonInitialized(Project project){
+        return project.listNonInitialized();
     }
 
-    /**
-     * create a new project and add to the ArrayList of projects
-     * @param name name of the project
-     * @param acronym acronym
-     * @param startDate start date of the project
-     * @param duration estimated duration
-     * @return the project created
-     */
-    public Project createProject(String name, String acronym, Date startDate, int duration){
-        int index = projects.size()+1;
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Project proj = new Project( index, name, acronym, startDate, duration);
-        try {
-            proj.setEndDate(format.parse("00/00/0000"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        projects.add(proj);
-        return proj;
-    }
+
+    //PERSON
 
     /**
      * create a teacher and add to the list
@@ -544,12 +551,14 @@ public class CISUC implements Serializable{
      * @param email e-mail
      * @param mechaNumber mecanographic number
      * @param researchArea research area
+     * @return person
      */
-    public void createTeacher(String name, String email, int mechaNumber, String researchArea){
+    public Person createTeacher(String name, String email, int mechaNumber, String researchArea){
         Person person;
         person = new Teacher(name, email, mechaNumber, researchArea);
 
         people.add(person);
+        return person;
     }
 
     /**
@@ -559,24 +568,24 @@ public class CISUC implements Serializable{
      * @param startDate start date of the scholarship
      * @param finalDate final date of the scholarship
      * @param statute  statute identify if is a bachelor, a master or a doctor
+     * @return person
      */
-    public void createScholar(String name, String email, Date startDate, Date finalDate, int statute){
+    public Person createScholar(String name, String email, Date startDate, Date finalDate, int statute){
         Person person;
         int index = people.size() + 1;
         if(statute==1){
             person = new Bachelor(name, email, startDate, finalDate, index);
             people.add(person);
         }
-        if(statute==2){
+        else if(statute==2){
             person = new Master(name, email, startDate, finalDate, index);
             people.add(person);
         }
-        if(statute==3){
+        else{
             person = new Doctor(name, email, startDate, finalDate, index);
             people.add(person);
         }
-
-
+        return person;
     }
 
     /**

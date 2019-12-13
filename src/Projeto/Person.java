@@ -2,6 +2,8 @@ package Projeto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public abstract class Person implements Serializable {
 
@@ -37,12 +39,37 @@ public abstract class Person implements Serializable {
     /**
      * add task to a person (and vice-versa)
      * @param task task
+     * @return true in success or false in error
      */
-    public void addTaskToPerson(Task task){
+    public boolean addTaskToPerson(Task task){
+
         if(checkOverload(task)==true){
-            tasks.add(task);
-            task.addPersonToTask(this);
+
+            if(calcCost() != 0){
+                Scholar s = (Scholar) this;
+
+                Date aux;
+                Date currentDate = new Date();
+
+                Calendar c = Calendar.getInstance();
+                c.setTime(currentDate);
+                c.add(Calendar.DATE, task.getDuration());
+                aux = c.getTime();
+
+                if(aux.before(s.getFinalDate())){
+                    tasks.add(task);
+                    task.addPersonToTask(this);
+                    return true;
+                }
+                return false;
+            }
+            else{
+                tasks.add(task);
+                task.addPersonToTask(this);
+                return true;
+            }
         }
+        return  false;
     }
 
     /**
@@ -56,8 +83,8 @@ public abstract class Person implements Serializable {
     }
 
     /**
-     * check if a person is overload or not
-     * @param task
+     * check if a person is overload with the task or not
+     * @param task task
      * @return false in case of overload and true if not
      */
     public boolean checkOverload(Task task) {
@@ -74,6 +101,11 @@ public abstract class Person implements Serializable {
         }
     }
 
+    /**
+     * the project in the ArrayList of projects with that index
+     * @param index int
+     * @return Project
+     */
     public Project getProject(int index){
         return projects.get(index);
     }

@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -149,26 +150,74 @@ public class Project implements Serializable {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         double cost = 0.0;
         Date currentDate = new Date();
-        Date aux;
-        for(Person p: people){
+        Date aux, aux2;
 
-            try {
-                if(getEndDate().compareTo(format.parse("00/00/0000")) == 1){
+        try {
+            if(getEndDate().compareTo(format.parse("00/00/0000")) == 1){
+                for(Person p: people) {
+                    if (p.calcCost() != 0) {
+                        Scholar s = (Scholar) p;
 
+                        if (s.getStartDate().before(startDate)) {
+                            aux = startDate;
+                        }
+                        else /*if(s.getStartDate().after(startDate) || s.getStartDate().compareTo(startDate) == 1)*/{
+                            aux = s.getStartDate();
+                        }
+
+                        if(s.getFinalDate().before(currentDate)){
+                            aux2 = s.getFinalDate();
+                        }
+                        else {
+                            aux2 = currentDate;
+                        }
+                        cost += p.calcCost() * ((aux2.getYear() - aux.getYear()) * 12 + (aux2.getMonth() - aux.getMonth()) + 1);
+                    }
                 }
-            } catch (ParseException e) {
-                System.out.println("");
             }
-            if(p.calcCost()!=0){
-                Scholar s = (Scholar) p;
-                //Fazer contasssssssssssssssssssssss
+            else{
+                for(Person p: people) {
+                    if (p.calcCost() != 0) {
+                        Scholar s = (Scholar) p;
+
+                        if (s.getStartDate().before(startDate)) {
+                            aux = startDate;
+                        }
+                        else {
+                            aux = s.getStartDate();
+                        }
+
+                        if(s.getFinalDate().before(endDate)){
+                            aux2 = s.getFinalDate();
+                        }
+                        else {
+                            aux2 = currentDate;
+                        }
+                        cost += p.calcCost() * ((aux2.getYear() - aux.getYear()) * 12 + (aux2.getMonth() - aux.getMonth()) + 1);
+                    }
+                }
             }
+        } catch (ParseException e) {
+            System.out.println("");
         }
+
         return cost;
     }
 
-    public void finishProject(){ // ainda nao sei o que fazer aqui
-
+    /**
+     * verify if a project is finish or not
+     * @return true if the project already end or false if not
+     */
+    public boolean finishProject(){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            if(endDate.compareTo(format.parse("00/00/0000"))==1){
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     /**
@@ -214,6 +263,10 @@ public class Project implements Serializable {
         return this.people;
     }
 
+    /**
+     * principal getter
+     * @return Teacher responsible for the project
+     */
     public Teacher getPrincipal() {
         return principal;
     }
