@@ -228,27 +228,20 @@ public class GraphicalUserInterface{
 
         //actions
 
-        login.addActionListener(new ButtonLogin());
-
-        register.addActionListener(new ButtonRegister());
+        login.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                registerAndLogin.setVisible(false);
+                login().setVisible(true);
+            }
+        });
+        register.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                registerAndLogin.setVisible(false);
+                register().setVisible(true);
+            }
+        });
 
         return frame;
-    }
-
-    private class ButtonLogin implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            registerAndLogin.setVisible(false);
-            login().setVisible(true);
-        }
-    }
-
-    private class ButtonRegister implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            registerAndLogin.setVisible(false);
-            register().setVisible(true);
-        }
     }
 
     private JFrame login (){
@@ -299,11 +292,12 @@ public class GraphicalUserInterface{
         JComboBox statuteBox = new JComboBox(statute);
         statuteBox.setBounds(comprimento/4, altura/8, comprimento/2, altura/8 );
         ComboBoxStatute comboBoxStatute = new ComboBoxStatute();
-
+        statuteBox.addActionListener(comboBoxStatute);
 
 
         JLabel choose = new JLabel("Choose a statute:");
         choose.setBounds(comprimento/4, altura/14, comprimento/2, 25);
+
 
         panel.setLayout(null);
         panel.add(statuteBox);
@@ -314,17 +308,95 @@ public class GraphicalUserInterface{
         return frame;
     }
 
-    private JPanel registerPanels(int statute){
+    private JFrame registerChoice(int statute){
+        JFrame frame = new JFrame();
         JPanel panel = new JPanel();
 
-        if(statute == 1){
+        int altura = 400;
+        int comprimento = 800;
+
+        frame.setSize(comprimento, altura);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JButton confirm = new JButton("Confirm");
+        JButton goBack = new JButton("Back");
+
+        //confirm.addActionListener( new ButtonConfirmRegister());
+        goBack.addActionListener( new ActionListener() {
+            public void actionPerformed (ActionEvent e) {
+                    frame.setVisible(false);
+                    register().setVisible(true);
+            }
+        });
+
+        JLabel email = new JLabel("   E-mail: ");
+        JTextField emailText = new JTextField(10);
+
+        JLabel name = new JLabel("   Name: ");
+        JTextField nameText = new JTextField(10);
+
+        if(statute == 0){
+            JLabel teacher = new JLabel("   Teacher");
+
+            JLabel mechaNumber = new JLabel("   Mechanographic number: ");
+            JTextField mechaNumberText = new JTextField(10);
+
+            JLabel researchArea = new JLabel("   Research Area: ");
+            JTextField researchAreaText = new JTextField(10);
+
+            panel.setLayout(new GridLayout(6, 2));
+            panel.add(teacher);
+            panel.add(new JLabel(""));
+            panel.add(name);
+            panel.add(nameText);
+            panel.add(email);
+            panel.add(emailText);
+            panel.add(mechaNumber);
+            panel.add(mechaNumberText);
+            panel.add(researchArea);
+            panel.add(researchAreaText);
+            panel.add(confirm);
+            panel.add(goBack);
 
         }
-        else if (statute == 2){
+        else {
+            panel.setLayout(new GridLayout(6, 2));
 
+            JLabel startDate = new JLabel("   Start date: ");
+            JTextField startDateText = new JTextField(10);
+
+            JLabel endDate = new JLabel("   End date: ");
+            JTextField endDateText = new JTextField(10);
+
+            if (statute == 1){
+                JLabel bachelor = new JLabel("   Bachelor");
+                panel.add(bachelor);
+            }
+            else if (statute == 2){
+                JLabel master = new JLabel("   Master");
+                panel.add(master);
+            }
+            else if (statute == 3){
+                JLabel doctor = new JLabel("   Doctor");
+                panel.add(doctor);
+            }
+
+            panel.add(new JLabel(""));
+            panel.add(name);
+            panel.add(nameText);
+            panel.add(email);
+            panel.add(emailText);
+            panel.add(startDate);
+            panel.add(startDateText);
+            panel.add(endDate);
+            panel.add(endDateText);
+            panel.add(confirm);
+            panel.add(goBack);
         }
 
-        return panel;
+        frame.add(panel);
+
+        return frame;
     }
 
     private class ComboBoxStatute implements ActionListener {
@@ -333,17 +405,22 @@ public class GraphicalUserInterface{
             JComboBox comboBox = (JComboBox)e.getSource();
             String statute = (String) comboBox.getSelectedItem();
 
-            if(statute.equalsIgnoreCase("Teacher")){
-                register().add(registerPanels(0));
+            if(statute.equalsIgnoreCase("Teacher") ){
+                register().setVisible(false);
+                registerChoice(0).setVisible(true);
+
             }
             else if(statute.equalsIgnoreCase("Bachelor")){
-                register().add(registerPanels(1));
+                register().setVisible(false);
+                registerChoice(1).setVisible(true);
             }
             else if(statute.equalsIgnoreCase("Master")){
-                register().add(registerPanels(2));
+                register().setVisible(false);
+                registerChoice(2).setVisible(true);
             }
             else if(statute.equalsIgnoreCase("Doctor")){
-                register().add(registerPanels(3));
+                register().setVisible(false);
+                registerChoice(3).setVisible(true);
             }
         }
     }

@@ -133,6 +133,10 @@ public class Project implements Serializable {
         return tasks.get(index);
     }
 
+    public ArrayList<Task> getTasks(){
+        return tasks;
+    }
+
     public int getTasksLen(){
         return tasks.size();
     }

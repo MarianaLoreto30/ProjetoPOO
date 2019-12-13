@@ -41,7 +41,7 @@ public class CISUC implements Serializable{
 
         gui = new GraphicalUserInterface(this);
         gui.registerAndLogin.setVisible(true);
-        
+
     }
 
     /**
@@ -453,8 +453,8 @@ public class CISUC implements Serializable{
     }
 
 
-    public void addProject(int index, String name, String acronym, Date startDate, int duration){
-        projects.add(new Project(index, name, acronym, startDate, duration));
+    public void addProject(String name, String acronym, Date startDate, int duration){
+        projects.add(new Project(projects.size()+1, name, acronym, startDate, duration));
     }
 
     public void listAllProjects(){
@@ -478,8 +478,9 @@ public class CISUC implements Serializable{
         return false;
     }
 
-    public void addTask(int index, Project project, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate){
+    public void addTask(Project project, String name, Date startDate, Date endDate, int duration, int conclusionState, Person responsible, double effortRate){
         boolean a = true;
+        int index = project.getTasks().size()+1;
         for (int i = 0; i < project.getTasksLen(); i++){
             if (project.getTask(i).getIndex() == index){
                 System.out.println("Already existing task!\n");
@@ -515,14 +516,16 @@ public class CISUC implements Serializable{
         }
     }
 
-    public Project createProject(){//read from here?
+    public Project createProject(String name, String acronym, Date startDate, int duration){
+        int index = projects.size()+1;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Project proj = new Project();
+        Project proj = new Project( index, name, acronym, startDate, duration);
         try {
             proj.setEndDate(format.parse("00/00/0000"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //projects.add(proj);
         return proj;
     }
 
@@ -543,6 +546,9 @@ public class CISUC implements Serializable{
         return person;
     }*/
 
+    /**
+     * print all people in CISUC
+     */
     public void listAllPeople(){
         for (int i = 0; i < people.size(); i++) {
             if(people.get(i).calcCost() == 0){
@@ -554,6 +560,10 @@ public class CISUC implements Serializable{
         }
     }
 
+    /**
+     * print all associates (teacher in charge of scholars and vice-versa)
+     * @param person teacher or scholar
+     */
     public void listAllAssociates(Person person){
         if(person.calcCost()==0){
             System.out.println("\n" + person.getName() + " - scholars in charge of:");
@@ -574,6 +584,10 @@ public class CISUC implements Serializable{
         }
     }
 
+    /**
+     * print all person's tasks
+     * @param person person
+     */
     public void listPersonTasks(Person person){
         for(int i=0; i<person.getTasksLen(); i++){
             System.out.println(person.getTask(i));
@@ -582,15 +596,20 @@ public class CISUC implements Serializable{
 
     public void listPersonProjects(){}
 
-    public void deleteProjectFromPerson(Person person, int index){
-        if (index > person.getProjectsLen()){
-            System.out.println("Invalid number!\n");
+    public void deleteProjectFromPerson(Person person, Project proj){
+        if (projects.contains(proj)){
+            person.deleteProjectFromPerson(proj);
         }
         else {
-            person.deleteProjectFromPerson(index);
+            System.out.println("This project doesn't belong to CISUC");
         }
     }
 
+    /**
+     * add person to task (and vise-versa)
+     * @param person person
+     * @param task task
+     */
     public void addPersonToTask(Person person, Task task){
         for (int i = 0; i < person.getTasksLen(); i++) {
             if(person.getTask(i).getIndex()==task.getIndex()){
@@ -599,6 +618,11 @@ public class CISUC implements Serializable{
         }
     }
 
+    /**
+     * add task to person
+     * @param person person
+     * @param task task
+     */
     public void addTaskToPerson(Person person, Task task){
         person.addTaskToPerson(task);
     }
@@ -607,7 +631,20 @@ public class CISUC implements Serializable{
         person.deleteTaskFromPerson(t);
     }
 
+    /**
+     * Evaluate the state of a project
+     * @param proj project
+     * @return true if the project is complete and false otherwise (endDate equals 00/00/0000)
+     */
     public boolean projectState(Project proj){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            if(proj.getEndDate().compareTo(format.parse("00/00/0000"))==1){
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -618,13 +655,4 @@ public class CISUC implements Serializable{
     public void addPersonToProject(Person person, Project project){
         project.addPersonToProject(person);
     }
-
-    /*
-    public void register(){
-        Person newPerson = createPerson();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Insert your name:");
-        newPerson.getName() = sc.nextLine();
-
-    }*/
 }

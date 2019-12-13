@@ -28,9 +28,10 @@ public abstract class Person implements Serializable {
 
     abstract boolean addProjectToPerson(Project project);
 
-    public void deleteProjectFromPerson(int index){
-        projects.remove(index);//Não deviamos apagar! Apenas por como inativo??
-        //projects.remove(project);
+    public void deleteProjectFromPerson(Project project){
+        if(projects.contains(project)){
+            projects.remove(project);
+        }
     }
 
     /**
@@ -44,6 +45,10 @@ public abstract class Person implements Serializable {
         }
     }
 
+    /**
+     * delete task from person
+     * @param t task
+     */
     public void deleteTaskFromPerson(Task t){
         if(tasks.contains(t)){
             tasks.remove(t);
