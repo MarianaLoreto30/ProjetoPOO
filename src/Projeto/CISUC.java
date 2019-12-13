@@ -13,15 +13,15 @@ public class CISUC implements Serializable{
     public static void main(String[] args) {
         new CISUC();
     }
-    private ArrayList<Person> people;
-    private ArrayList<Project> projects;
+    public ArrayList<Person> people;
+    public ArrayList<Project> projects;
     private GraphicalUserInterface gui;
 
     public CISUC(){
-        //readFilePeople();
-        //readFileProjects();
-        readObjectFile();
-        //writeObjectsFile();
+        readFilePeople();
+        readFileProjects();
+        //readObjectFile();
+        writeObjectsFile();
 
         //listAllPeople();
 
@@ -102,8 +102,10 @@ public class CISUC implements Serializable{
 
                             }catch (NumberFormatException e) {
                                 System.out.println("Erro ao converter number: " + e.getMessage());
+                                e.printStackTrace();
                             }catch (NullPointerException e){
                                 System.out.println("Erro ao adicionar na lista: " + e.getMessage());
+                                e.printStackTrace();
                             }
 
                         }
@@ -452,7 +454,6 @@ public class CISUC implements Serializable{
         writeObjectsFile();
     }
 
-
     public void addProject(String name, String acronym, Date startDate, int duration){
         projects.add(new Project(projects.size()+1, name, acronym, startDate, duration));
     }
@@ -516,6 +517,14 @@ public class CISUC implements Serializable{
         }
     }
 
+    /**
+     * create a new project and add to the ArrayList of projects
+     * @param name name of the project
+     * @param acronym acronym
+     * @param startDate start date of the project
+     * @param duration estimated duration
+     * @return the project created
+     */
     public Project createProject(String name, String acronym, Date startDate, int duration){
         int index = projects.size()+1;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -525,26 +534,50 @@ public class CISUC implements Serializable{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //projects.add(proj);
+        projects.add(proj);
         return proj;
     }
 
-    /*
-    public Person createTeacher(String name, String email, int mechaNumber, String reserchArea){
-        //String name, String eMail, int mechaNumber, String reserchArea
+    /**
+     * create a teacher and add to the list
+     * @param name name
+     * @param email e-mail
+     * @param mechaNumber mecanographic number
+     * @param researchArea research area
+     */
+    public void createTeacher(String name, String email, int mechaNumber, String researchArea){
         Person person;
-        person = new Teacher(name, email, mechaNumber, reserchArea);
+        person = new Teacher(name, email, mechaNumber, researchArea);
 
-        return person;
+        people.add(person);
     }
 
-    public Person createScholar(String name, String email, Date startDate, Date finalDate){
-        //String name, String eMail, int mechaNumber, String reserchArea
+    /**
+     * create a scholar
+     * @param name name
+     * @param email e-mail
+     * @param startDate start date of the scholarship
+     * @param finalDate final date of the scholarship
+     * @param statute  statute identify if is a bachelor, a master or a doctor
+     */
+    public void createScholar(String name, String email, Date startDate, Date finalDate, int statute){
         Person person;
-        person = new Bachelor(name, email, startDate, finalDate);
+        int index = people.size() + 1;
+        if(statute==1){
+            person = new Bachelor(name, email, startDate, finalDate, index);
+            people.add(person);
+        }
+        if(statute==2){
+            person = new Master(name, email, startDate, finalDate, index);
+            people.add(person);
+        }
+        if(statute==3){
+            person = new Doctor(name, email, startDate, finalDate, index);
+            people.add(person);
+        }
 
-        return person;
-    }*/
+
+    }
 
     /**
      * print all people in CISUC
@@ -627,6 +660,11 @@ public class CISUC implements Serializable{
         person.addTaskToPerson(task);
     }
 
+    /**
+     * delete task from person
+     * @param person person
+     * @param t task that we intend to disassociate
+     */
     public void deleteTaskFromPerson(Person person, Task t){
         person.deleteTaskFromPerson(t);
     }
@@ -648,11 +686,22 @@ public class CISUC implements Serializable{
         return true;
     }
 
+    /**
+     * associate project to person
+     * @param person person
+     * @param project project
+     */
     public void addProjectToPerson(Person person, Project project){
         person.addProjectToPerson(project);
     }
 
+    /**
+     * associate person to a project
+     * @param person person
+     * @param project project
+     */
     public void addPersonToProject(Person person, Project project){
         project.addPersonToProject(person);
     }
+
 }

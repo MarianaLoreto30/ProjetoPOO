@@ -111,6 +111,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GraphicalUserInterface{
@@ -119,37 +121,23 @@ public class GraphicalUserInterface{
     //VARIABLES
     private int width;
     private int height;
+    private SimpleDateFormat format;
     public JFrame registerAndLogin;
-    //public JFrame login;
-    //public JFrame register;
-    //PRIMEIRO PAIPEL
+    private JFrame loginFrame;
+    private JFrame registerFrame;
+    private JFrame cisucPage;
+
 
     public GraphicalUserInterface(CISUC cisuc) {
         this.cisuc = cisuc;
         this.width = 400;
         this.height = 300;
+        this.format= new SimpleDateFormat("dd/MM/yyyy");
 
         registerAndLogin=registerAndLogin();
-        //login = login();
-        //register = register();
-
-
-    /*   setTitle("CISUC");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel label = new JLabel("CISUC");
-        label.setBounds(160, 90, 100, 25);
-        JButton projects = new JButton("Projects");
-        projects.setBounds(70, 150, 100, 20);
-        JButton people = new JButton("People");
-        people.setBounds(180, 150, 100, 20);
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.add(label);
-        panel.add(projects);
-        panel.add(people);
-        add(panel);
-        setVisible(true);*/
+        loginFrame = login();
+        registerFrame = register();
+        cisucPage = cisucPage();
 
 
 
@@ -208,7 +196,7 @@ public class GraphicalUserInterface{
 
         frame.setTitle("CISUC - investigation center");
         frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(closeOperartion());
         labelWelcome = new JLabel("Welcome!");
         labelWelcome.setBounds(150, 90, 100, 25);
 
@@ -231,13 +219,13 @@ public class GraphicalUserInterface{
         login.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 registerAndLogin.setVisible(false);
-                login().setVisible(true);
+                loginFrame.setVisible(true);
             }
         });
         register.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 registerAndLogin.setVisible(false);
-                register().setVisible(true);
+                registerFrame.setVisible(true);
             }
         });
 
@@ -249,7 +237,7 @@ public class GraphicalUserInterface{
         JFrame frame = new JFrame();
 
         frame.setSize(400, 300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(closeOperartion());
 
         JLabel email = new JLabel("E-mail");
         email.setBounds(50, 50, 100, 25);
@@ -261,7 +249,7 @@ public class GraphicalUserInterface{
         JTextField nameText = new JTextField(10);
         nameText.setBounds(50, 125, 200, 25);
 
-        JButton button = new JButton("Login"); //
+        JButton button = new JButton("Login");
         button.setBounds(50, 160, 100, 25);
 
         JPanel panel = new JPanel();
@@ -285,7 +273,8 @@ public class GraphicalUserInterface{
         int comprimento = 800;
 
         frame.setSize(comprimento, altura);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(closeOperartion());
 
         String[] statute = {"Teacher", "Bachelor", "Master", "Doctor"};
 
@@ -294,10 +283,8 @@ public class GraphicalUserInterface{
         ComboBoxStatute comboBoxStatute = new ComboBoxStatute();
         statuteBox.addActionListener(comboBoxStatute);
 
-
         JLabel choose = new JLabel("Choose a statute:");
         choose.setBounds(comprimento/4, altura/14, comprimento/2, 25);
-
 
         panel.setLayout(null);
         panel.add(statuteBox);
@@ -316,16 +303,17 @@ public class GraphicalUserInterface{
         int comprimento = 800;
 
         frame.setSize(comprimento, altura);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setTitle("New register");
+        frame.setDefaultCloseOperation(closeOperartion());
 
         JButton confirm = new JButton("Confirm");
         JButton goBack = new JButton("Back");
 
-        //confirm.addActionListener( new ButtonConfirmRegister());
         goBack.addActionListener( new ActionListener() {
             public void actionPerformed (ActionEvent e) {
                     frame.setVisible(false);
-                    register().setVisible(true);
+                    registerFrame.setVisible(true);
             }
         });
 
@@ -357,6 +345,41 @@ public class GraphicalUserInterface{
             panel.add(researchAreaText);
             panel.add(confirm);
             panel.add(goBack);
+
+            confirm.addActionListener(  new ActionListener() {
+                public void actionPerformed (ActionEvent e) {
+                    try{
+                        if(nameText.getText().isEmpty() || emailText.getText().isEmpty() || mechaNumber.getText().isEmpty() || researchAreaText.getText().isEmpty()){
+                            JOptionPane.showMessageDialog(null, "All fields must be complete", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        }
+                        else if(mechaNumberText.getText().length() >= 10){
+                            JOptionPane.showMessageDialog(null, "Invalid number", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        }
+                        else{
+                            int number = Integer.parseInt(mechaNumberText.getText());
+                            for(int i=0; i<cisuc.people.size(); i++){
+                                if(cisuc.people.get(i).calcCost()==0){
+                                    Teacher t = (Teacher) cisuc.people.get(i);
+                                    if(t.getMechaNumber() == number){
+                                        String value = JOptionPane.showInputDialog(null, "That number already exists, introduce a new one: ", "Mecanograph number", JOptionPane.QUESTION_MESSAGE);
+                                        number = Integer.parseInt(value);
+                                        mechaNumberText.setText(value);
+                                        i=0;
+                                    }
+                                }
+                            }
+                            cisuc.createTeacher(nameText.getText(), emailText.getText(), number, researchAreaText.getText());
+                        }
+                    }
+                    catch (NumberFormatException ex) {
+                        System.out.println("Erro ao converter number: " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+
+                    frame.setVisible(false);
+                    cisucPage.setVisible(true);
+                }
+            });
 
         }
         else {
@@ -392,6 +415,38 @@ public class GraphicalUserInterface{
             panel.add(endDateText);
             panel.add(confirm);
             panel.add(goBack);
+
+            confirm.addActionListener(  new ActionListener() {
+                public void actionPerformed (ActionEvent e) {
+                    try{
+                        if(nameText.getText().isEmpty() || emailText.getText().isEmpty() || startDate.getText().isEmpty() || endDate.getText().isEmpty()){
+                            JOptionPane.showMessageDialog(null, "All fields must be complete", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        }
+                        else{
+                            Date date1, date2, currentDate;
+                            currentDate = new Date();
+                            date1 = format.parse(startDateText.getText());
+                            date2 = format.parse(endDateText.getText());
+
+                            while(date2.before(currentDate)){
+                                String value = JOptionPane.showInputDialog(null, "The current date cannot exceed the end date, write a new one", "Error in end date!", JOptionPane.QUESTION_MESSAGE);date2 = format.parse(endDateText.getText());
+                                date2 = format.parse(value);
+                                endDateText.setText(value);
+
+                            }
+                            cisuc.createScholar(nameText.getText(), emailText.getText(), date1, date2, statute);
+                        }
+                    }
+                    catch (ParseException ex) {
+                        System.out.println("Error converting date: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(null, "Date have incorrect format", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        //ex.printStackTrace();
+                    }
+
+                    frame.setVisible(false);
+                    cisucPage.setVisible(true);
+                }
+            });
         }
 
         frame.add(panel);
@@ -406,22 +461,60 @@ public class GraphicalUserInterface{
             String statute = (String) comboBox.getSelectedItem();
 
             if(statute.equalsIgnoreCase("Teacher") ){
-                register().setVisible(false);
+                registerFrame.setVisible(false);
                 registerChoice(0).setVisible(true);
 
             }
             else if(statute.equalsIgnoreCase("Bachelor")){
-                register().setVisible(false);
+                registerFrame.setVisible(false);
                 registerChoice(1).setVisible(true);
             }
             else if(statute.equalsIgnoreCase("Master")){
-                register().setVisible(false);
+                registerFrame.setVisible(false);
                 registerChoice(2).setVisible(true);
             }
             else if(statute.equalsIgnoreCase("Doctor")){
-                register().setVisible(false);
+                registerFrame.setVisible(false);
                 registerChoice(3).setVisible(true);
             }
         }
+    }
+
+    private JFrame cisucPage(){
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+
+        frame.setTitle("CISUC - investigation center");
+        frame.setSize(700, 400);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(closeOperartion());
+
+
+        JLabel label = new JLabel("CISUC");
+        label.setBounds(325, 100, 100, 25);
+        label.setForeground(Color.cyan);
+        label.setFont(new Font("Calibri", Font.BOLD,20));
+
+        JButton projects = new JButton("Projects");
+        projects.setBounds(150, 150, 150, 20);
+
+        JButton people = new JButton("People");
+        people.setBounds(400, 150, 150, 20);
+
+        panel.setLayout(null);
+        panel.add(label);
+        panel.add(projects);
+        panel.add(people);
+
+        frame.add(panel);
+
+        return  frame;
+    }
+
+    private int closeOperartion(){
+
+        cisuc.writeObjectsFile();
+        return JFrame.EXIT_ON_CLOSE;
+
     }
 }
