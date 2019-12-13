@@ -40,7 +40,10 @@ public class CISUC implements Serializable{
         }*/
 
         gui = new GraphicalUserInterface(this);
-        gui.registerAndLogin.setVisible(true);
+        //gui.registerAndLogin.setVisible(true);
+        /*finishedProjects();
+        unfinishedProjects();*/
+        gui.projectsPage.setVisible(true);
 
     }
 
@@ -473,7 +476,7 @@ public class CISUC implements Serializable{
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Project proj = new Project( index, name, acronym, startDate, duration);
         try {
-            proj.setEndDate(format.parse("00/00/0000"));
+            proj.setEndDate(format.parse("01/01/1971"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -681,12 +684,12 @@ public class CISUC implements Serializable{
     /**
      * Evaluate the state of a project
      * @param proj project
-     * @return true if the project is complete and false otherwise (endDate equals 00/00/0000)
+     * @return true if the project is complete and false otherwise (endDate equals 01/01/1971)
      */
     public boolean projectState(Project proj){
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            if(proj.getEndDate().compareTo(format.parse("00/00/0000"))==1){
+            if(proj.getEndDate().compareTo(format.parse("01/01/1971"))==1){
                 return false;
             }
         } catch (ParseException e) {
@@ -713,4 +716,24 @@ public class CISUC implements Serializable{
         project.addPersonToProject(person);
     }
 
+    public ArrayList<Project> finishedProjects() {
+        ArrayList<Project> finishedProjects = new ArrayList<>();
+        for(Project p: projects) {
+            if (p.finishProject()) {
+                finishedProjects.add(p);
+                System.out.println(p.getName());
+            }
+        }
+        return finishedProjects;
+    }
+    public ArrayList<Project> unfinishedProjects() {
+        ArrayList<Project> unfinishedProjects = new ArrayList<>();
+        for(Project p: projects) {
+            if (!p.finishProject()) {
+                unfinishedProjects.add(p);
+                System.out.println(p.getName());
+            }
+        }
+        return unfinishedProjects;
+    }
 }

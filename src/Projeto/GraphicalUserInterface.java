@@ -19,7 +19,7 @@ public class GraphicalUserInterface{
     private JFrame loginFrame;
     private JFrame registerFrame;
     private JFrame cisucPage;
-    private JFrame projectPage;
+    public JFrame projectsPage;
     private JFrame personPage;
     private Person person;
 
@@ -32,48 +32,10 @@ public class GraphicalUserInterface{
         loginFrame = login();
         registerFrame = register();
         cisucPage = cisucPage();
-        projectPage = projectPage();
+        projectsPage = projectPage();
         personPage = personPage();
 
 
-        /*JList list;
-        JLabel labelSelectedValue;
-        JFrame frame = new JFrame();
-        frame.setTitle("JList");
-        frame.setSize(400, 300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel label = new JLabel("Lista de valores (selecionar 1 ou mais valores)");
-        label.setBounds(50, 10, 300, 25);
-        DefaultListModel listValues = new DefaultListModel();
-        listValues.addElement("Item 1");
-        listValues.addElement("Item 2");
-        listValues.addElement("Item 3");
-        listValues.addElement("Item 4");
-        listValues.addElement("Item 5");
-        listValues.addElement("Item 6");
-        listValues.addElement("Item 7");
-        listValues.addElement("Item 8");
-        listValues.addElement("Item 9");
-        listValues.addElement("Item 10");
-        listValues.addElement("Item 11");
-        listValues.addElement("Item 12");
-        list = new JList(listValues);
-        JScrollPane listScroller = new JScrollPane(list);
-        listScroller.setBounds(50, 35, 300, 150);
-        JButton btnSelected = new JButton("Selecionado ");
-        ButtonListener btnActionListener = new ButtonListener();
-        btnSelected.addActionListener(btnActionListener);
-        btnSelected.setBounds(50, 200, 120, 25);
-        labelSelectedValue = new JLabel("-");
-        labelSelectedValue.setBounds(180, 200, 170, 25);
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.add(label);
-        panel.add(listScroller);
-        panel.add(btnSelected);
-        panel.add(labelSelectedValue);
-        frame.add(panel);
-        frame.setVisible(true);*/
 
     }
 
@@ -372,7 +334,7 @@ public class GraphicalUserInterface{
                     }
                     catch (ParseException ex) {
                         System.out.println("Error converting date: " + ex.getMessage());
-                        JOptionPane.showMessageDialog(null, "Date have incorrect format", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Incorrect date format", "Attention!", JOptionPane.PLAIN_MESSAGE);
                         //ex.printStackTrace();
                     }
 
@@ -467,16 +429,22 @@ public class GraphicalUserInterface{
         JButton goBack = new JButton("Back");
 
 
-        //ButtonListener btnActionListener = new ButtonListener();
-        //btnSelected.addActionListener(btnActionListener);
         btnSelected.setBounds(50, 200, 120, 25);
-        goBack.setBounds(100, 200, 120, 25);
+        goBack.setBounds(200, 200, 120, 25);
 
 
         goBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(false);
                 cisucPage().setVisible(true);
+            }
+        });
+        btnSelected.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int index = list.getSelectedIndex();
+                projectsChoice(index).setVisible(true);
+                frame.setVisible(false);
             }
         });
 
@@ -558,6 +526,214 @@ public class GraphicalUserInterface{
         return frame;
     }
 
+    private JFrame projectsPage() {
+
+        JFrame frame = new JFrame();
+        frame.setResizable(false);
+        frame.setTitle("Projects");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        listValues = new DefaultListModel();
+
+        listValues.addElement("Create project");
+        listValues.addElement("List all projects");
+        listValues.addElement("List finished projects");
+        listValues.addElement("List unfinished projects");
+
+        list = new JList(listValues);
+        JScrollPane listScroller = new JScrollPane(list);
+        listScroller.setBounds(50, 60, 300, 80);
+
+        JButton btnSelected = new JButton("Select");
+        JButton goBack = new JButton("Back");
+
+        btnSelected.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int index = list.getSelectedIndex();
+                projectsChoice(index).setVisible(true);
+                frame.setVisible(false);
+            }
+        });
+
+        btnSelected.setBounds(50, 200, 120, 25);
+        goBack.setBounds(100, 200, 120, 25);
+
+
+        goBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                cisucPage().setVisible(true);
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        panel.add(listScroller);
+        panel.add(btnSelected);
+        panel.add(goBack);
+        frame.add(panel);
+
+        return frame;
+    }
+
+    private JFrame projectsChoice(int index) {
+        JFrame frame = new JFrame();
+        frame.setResizable(false);
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Date startData;
+
+        if (index == 0) {
+
+            frame.setTitle("New Project");
+            JLabel name = new JLabel("Name:");
+            JTextField nametxt = new JTextField(10);
+            JLabel acronym = new JLabel("Acronym:");
+            JTextField acronymtxt = new JTextField(10);
+            JLabel startDate = new JLabel("Start Date:");
+            JTextField startDatetxt = new JTextField(10);
+            JLabel duration = new JLabel("Duration:");
+            JTextField durationtxt = new JTextField(10);
+            JButton done = new JButton("Done");
+            JButton goBack = new JButton("Back");
+
+            goBack.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    frame.setVisible(false);
+                    projectsPage.setVisible(true);
+                }
+            });
+
+            done.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        if (nametxt.getText().isEmpty() || acronymtxt.getText().isEmpty() || startDatetxt.getText().isEmpty() || durationtxt.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "All fields must be complete", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                        }
+                        Date startData = (format.parse(startDatetxt.getText()));
+                        int duration = Integer.parseInt(durationtxt.getText());
+                        cisuc.createProject(nametxt.getText(), acronymtxt.getText(), startData, duration);
+                    }
+                    catch(ParseException ex){
+                        System.out.println("Error converting date: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(null, "Incorrect date format", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    catch(NumberFormatException ex){
+                        System.out.println("Must be an integer: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(null, "Duration must be an integer", "Attention!", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    frame.setVisible(false);
+                    projectsPage.setVisible(true);
+
+                }
+            });
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(5, 2));
+            panel.add(name);
+            panel.add(nametxt);
+            panel.add(acronym);
+            panel.add(acronymtxt);
+            panel.add(startDate);
+            panel.add(startDatetxt);
+            panel.add(duration);
+            panel.add(durationtxt);
+            panel.add(done);
+            panel.add(goBack);
+            frame.add(panel);
+            frame.setVisible(true);
+
+
+
+        } else if (index == 1) {
+            frame.setTitle("All Projects");
+            JLabel label = new JLabel("All Projects");
+            label.setBounds(50, 10, 300, 25);
+            DefaultListModel allProj = new DefaultListModel();
+            JList listAllProj = new JList(allProj);
+
+            for (Project p:cisuc.projects)
+                allProj.addElement(p.getName());
+
+            JScrollPane listScroller = new JScrollPane(listAllProj);
+            listScroller.setBounds(50, 35, 300, 150);
+            JButton goBack = new JButton("Back");
+            goBack.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    frame.setVisible(false);
+                    projectsPage.setVisible(true);
+                }
+            });
+            goBack.setBounds(50, 200, 120, 25);
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            panel.add(label);
+            panel.add(listScroller);
+            panel.add(goBack);
+            frame.add(panel);
+        }
+
+
+        else if(index == 2) {
+            frame.setTitle("Finished Projects");
+            JLabel label = new JLabel("Finished Projects");
+            label.setBounds(50, 10, 300, 25);
+            DefaultListModel fProj = new DefaultListModel();
+            JList listfProj = new JList(fProj);
+
+            for (Project p : cisuc.finishedProjects())
+                fProj.addElement(p.getName());
+
+            JScrollPane listScroller = new JScrollPane(listfProj);
+            listScroller.setBounds(50, 35, 300, 150);
+            JButton goBack = new JButton("Back");
+            goBack.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    frame.setVisible(false);
+                    projectsPage.setVisible(true);
+                }
+            });
+            goBack.setBounds(50, 200, 120, 25);
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            panel.add(label);
+            panel.add(listScroller);
+            panel.add(goBack);
+            frame.add(panel);
+        }
+        else if(index == 3){
+            frame.setTitle("Unfinished Projects");
+            JLabel label = new JLabel("Unfinished Projects");
+            label.setBounds(50, 10, 300, 25);
+            DefaultListModel unfProj = new DefaultListModel();
+            JList listunfProj = new JList(unfProj);
+
+            for (Project p : cisuc.unfinishedProjects())
+                unfProj.addElement(p.getName());
+
+            JScrollPane listScroller = new JScrollPane(listunfProj);
+            listScroller.setBounds(50, 35, 300, 150);
+            JButton goBack = new JButton("Back");
+            goBack.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    frame.setVisible(false);
+                    projectsPage.setVisible(true);
+                }
+            });
+            goBack.setBounds(50, 200, 120, 25);
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            panel.add(label);
+            panel.add(listScroller);
+            panel.add(goBack);
+            frame.add(panel);
+        }
+        return frame;
+
+    }
     private int closeOperartion(){
 
         cisuc.writeObjectsFile();
